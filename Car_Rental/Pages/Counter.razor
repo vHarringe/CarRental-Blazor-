@@ -1,0 +1,90 @@
+﻿@page "/counter"
+@using Car_Business
+@using Car_Rental.Common.Enums
+@using Car_Rental.Common.Classes
+@using Car_Business.Classes
+@using Car_Rental.Data.Classes
+@inject CollectionData cd
+
+
+<PageTitle>Counter</PageTitle>
+
+
+@if(alert)
+{
+    <div class="alert alert-warning" role="alert">
+        A simple warning alert with <a href="#" class="alert-link">an example link</a>. Give it a click if you like.
+        <button type="button" class="btn-close float-end" @onclick="CloseAlert" ></button>
+    </div>
+
+}
+
+<div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Last Name</th>
+            <th>First Name</th>
+            <th>SSN</th>
+            
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><input @bind="lName" /></td>
+            <td><input @bind="fName" /></td>
+                <td><input @bind="Ssn" /> <button class="btn btn-primary" @onclick="AddCustomer">registrera</button></td>
+           
+        </tr>
+
+       @foreach(var test in cd.GetPersons())
+        {
+            <tr>
+                <td>@test.firstName</td>
+                <td>@test.lastName</td>
+                <td>@test.Ssn</td>
+                
+            </tr>
+        }
+
+        
+    </tbody>
+</table>
+    
+</div>
+
+@code {
+
+    bool alert = false;
+
+    public int currentCount = 0;
+    private string? lName = null;
+    private string? fName = null;
+    private int? Ssn = null;
+
+
+    private void AddCustomer()
+    {
+        if(lName is not null && fName is not null && Ssn is not null){
+            cd.AddCustomer(lName, fName, (int)Ssn);
+            lName = "";
+            fName = "";
+            Ssn = null;
+            alert = false;
+
+        }
+        else
+        {
+            alert = true;
+        }
+
+
+    }
+    private void CloseAlert()
+    {
+        alert = false;
+    }
+
+
+}
