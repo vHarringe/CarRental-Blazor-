@@ -12,7 +12,7 @@ namespace Car_Rental.Common.Interfaces
         public string firstName { get; set; }
         public int Ssn { get; set; }
         
-
+        public int customerId { get; set; }
 
 
 

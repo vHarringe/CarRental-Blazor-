@@ -1,0 +1,129 @@
+﻿@page "/kunder"
+
+@using Car_Business.Classes
+
+@inject BookingProcessor pb
+
+
+<PageTitle>Kunder</PageTitle>
+
+
+@if(alert)
+{
+    <div class="alert alert-warning" role="alert">
+        A simple warning alert with <a href="#" class="alert-link">an example link</a>. Give it a click if you like.
+        <button type="button" class="btn-close float-end" @onclick="CloseAlert" ></button>
+    </div>
+
+}
+
+
+
+<!-- Registrera ny -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+    Registrera ny kund
+</button>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Registrera ny kund</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body mb-2">
+                <form>
+                    <div class="mb-3">
+                        <label for="förnamnInput" class="form-label">Förnamn</label>
+                        <input type="text" class="form-control" id="förnamnInput" @bind="fName">
+                    </div>
+                    <div class="mb-3">
+                        <label for="efternamnInput" class="form-label">Efternamn</label>
+                        <input type="text" class="form-control" id="efternamnInput" @bind="lName">
+                    </div>
+                    <div class="mb-3">
+                        <label for="SSNInput" class="form-label">SSN</label>
+                        <input type="text" class="form-control" id="SSNInput" @bind="Ssn">
+                    </div>
+                   
+                </form>
+            </div>
+            <div class="modal-footer">
+                
+                <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" @onclick="AddCustomer">registrera ny</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div>
+   
+<table class="table float-left">
+    <thead>
+        <tr>
+            <th>Last Name</th>
+            <th>First Name</th>
+            <th>SSN</th>
+            <th>Customer ID</th>
+            
+        </tr>
+    </thead>
+    <tbody>
+       
+
+            @foreach (var test in pb.GetPersons())
+        {
+            <tr>
+                <td>@test.firstName</td>
+                <td>@test.lastName</td>
+                <td>@test.Ssn</td>
+                <td>@test.customerId</td>
+                
+            </tr>
+        }
+           
+        
+    </tbody>
+</table>
+    
+</div>
+
+
+
+@code {
+
+    bool alert = false;
+
+    public int currentCount = 0;
+    private string? lName = null;
+    private string? fName = null;
+    private int? customerId = null;
+    private int? Ssn = null;
+
+
+    private void AddCustomer()
+    {
+        if(lName is not null && fName is not null && Ssn is not null){
+            pb.AddCustomer(lName, fName, (int)Ssn);
+            lName = "";
+            fName = "";
+            Ssn = null;
+            alert = false;
+
+        }
+        else
+        {
+            alert = true;
+        }
+
+
+    }
+    private void CloseAlert()
+    {
+        alert = false;
+    }
+
+
+}

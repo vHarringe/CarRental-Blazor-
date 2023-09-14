@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34024.191
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Car_Rental", "Car_Rental\Car_Rental.csproj", "{DE29F68B-B237-4A48-B7BC-43AABA892019}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Car_Rental", "Car_Rental\Car_Rental.csproj", "{DE29F68B-B237-4A48-B7BC-43AABA892019}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Car Rental.Business", "Car Business\Car Rental.Business.csproj", "{9204075C-3308-42E4-B32C-2A711D1E690D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Car Rental.Business", "Car Business\Car Rental.Business.csproj", "{9204075C-3308-42E4-B32C-2A711D1E690D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Car Rental.Common", "Car Rental.Common\Car Rental.Common.csproj", "{335B8ED2-5255-4DFD-82CE-0FA504B00929}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Car Rental.Common", "Car Rental.Common\Car Rental.Common.csproj", "{335B8ED2-5255-4DFD-82CE-0FA504B00929}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Car Rental.Data", "Car Rental.Data\Car Rental.Data.csproj", "{E27DA898-D7AB-4760-AF66-BA6214072993}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Car Rental.Data", "Car Rental.Data\Car Rental.Data.csproj", "{E27DA898-D7AB-4760-AF66-BA6214072993}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

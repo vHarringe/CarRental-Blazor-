@@ -1,34 +1,46 @@
-﻿using Car_Rental.Common.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Car_Data;
 using Car_Rental.Data.Classes;
-using Car_Rental.Data.Interfaces;
+using Car_Rental.Common.Interfaces;
 using Car_Rental.Common.Classes;
+
 
 namespace Car_Business.Classes
 {
-    internal class BookingProcessor
+    public class BookingProcessor
     {
-        private readonly IData _db;
+        public readonly IData _db;
+        
 
-        public BookingProcessor(IData db) => _db = db;
-
-        public void AddPerson(IPerson customer)
+        public BookingProcessor(IData db)
         {
+            _db = db;
             
-            var person = new Customer
+        }
+
+
+
+
+
+
+        public void AddCustomer(string lName, string fName, int SSN)
+        {
+            var newCustomer = new Customer
             {
-                
-                lastName = "Vilgot Harringe",
-                firstName = "vilgot@example.com",
-                Ssn = 12323
+                lastName = lName,
+                firstName = fName,
+                Ssn = SSN,
+                customerId = _db._persons.Count() + 1
             };
 
-            
-           
+            _db._persons.Add(newCustomer); 
         }
+
+        public List<IPerson> GetPersons()
+        {
+            return _db._persons; 
+        }
+        
+  
+
     }
 }

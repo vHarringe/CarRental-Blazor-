@@ -1,3 +1,5 @@
+using Car_Business.Classes;
+using Car_Data;
 using Car_Rental;
 using Car_Rental.Data.Classes;
 using Microsoft.AspNetCore.Components.Web;
@@ -8,8 +10,10 @@ builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
-builder.Services.AddSingleton<CollectionData>();
-builder.Services.AddScoped<CollectionData>();
+
+builder.Services.AddScoped<BookingProcessor>();
+builder.Services.AddScoped<IData, CollectionData>();
+
 
 
 
