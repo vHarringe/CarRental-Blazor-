@@ -1,0 +1,80 @@
+﻿@page "/fordon"
+@using Car_Business.Classes
+
+@inject BookingProcessor pb
+
+<!-- Registrera ny -->
+<button type="button" class="btn btn-primary mb-5" data-bs-toggle="modal" data-bs-target="#exampleModal">
+    Registrera nytt fordon
+</button>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Registrera ny kund</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body mb-2">
+                <form>
+                    <div class="mb-3">
+                        <label for="förnamnInput" class="form-label">Make</label>
+                        <input type="text" class="form-control" id="förnamnInput" @bind="make">
+                    </div>
+                    <div class="mb-3">
+                        <label for="efternamnInput" class="form-label">Model</label>
+                        <input type="text" class="form-control" id="efternamnInput" @bind="model">
+                    </div>
+                    <div class="mb-3">
+                        <label for="SSNInput" class="form-label">costDay</label>
+                        <input type="text" class="form-control" id="SSNInput" @bind="costDay">
+                    </div>
+                    <div class="mb-3">
+                        <label for="SSNInput" class="form-label">costKM</label>
+                        <input type="text" class="form-control" id="SSNInput" @bind="costKM">
+                    </div>
+                    <div class="mb-3">
+                        <label for="SSNInput" class="form-label">Vehicle ID</label>
+                        <input type="text" class="form-control" id="SSNInput" @bind="vehicleID">
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+
+                <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" @onclick="AddVehicle">registrera ny</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<p>
+    Skriv in alla detaljer, sen i slutet så får du välja Enum Aka vehiclyType. 
+    baserat på vilken du väljer byter "skapa fordon"-knappen metod. antingen car eller motorcycle
+    ezpz
+
+</p>
+
+
+
+@code 
+{
+    private string? make;
+    private string? model;
+    private int? costDay;
+    private int? costKM;
+    private int? vehicleID;
+
+    private void AddVehicle()
+    {
+       
+
+
+
+
+    }
+
+
+
+}

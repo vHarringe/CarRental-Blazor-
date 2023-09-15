@@ -2,6 +2,7 @@
 using Car_Rental.Data.Classes;
 using Car_Rental.Common.Interfaces;
 using Car_Rental.Common.Classes;
+using Car_Rental.Common.Enums;
 
 
 namespace Car_Business.Classes
@@ -17,23 +18,30 @@ namespace Car_Business.Classes
             
         }
 
-
-
-
-
-
-        public void AddCustomer(string lName, string fName, int SSN)
+        public Customer CreateCustomer(string lName, string fName, int? SSN)
         {
-            var newCustomer = new Customer
-            {
-                lastName = lName,
-                firstName = fName,
-                Ssn = SSN,
-                customerId = _db._persons.Count() + 1
-            };
+           Customer newCustomer = new Customer(lName, fName, SSN);
+            newCustomer.customerId = $"#{(_db._persons.Count() + 1)}";
 
-            _db._persons.Add(newCustomer); 
+            return newCustomer;
+
         }
+
+        public void CreateVehicle()
+        {
+
+
+        }
+      
+
+
+        public void AddCustomer<T>(T item)
+        {
+
+            _db.Add(item);
+
+        }
+      
 
         public List<IPerson> GetPersons()
         {

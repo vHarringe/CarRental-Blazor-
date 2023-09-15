@@ -19,8 +19,8 @@
 
 
 
-<!-- Registrera ny -->
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+<!-- Registrera ny kund -->
+<button type="button" class="btn btn-primary mb-5" data-bs-toggle="modal" data-bs-target="#exampleModal">
     Registrera ny kund
 </button>
 
@@ -60,7 +60,7 @@
 
 <div>
    
-<table class="table float-left">
+<table class="table float-left table-striped">
     <thead>
         <tr>
             <th>Last Name</th>
@@ -99,14 +99,18 @@
     public int currentCount = 0;
     private string? lName = null;
     private string? fName = null;
-    private int? customerId = null;
+    private string? customerId = null;
     private int? Ssn = null;
 
 
     private void AddCustomer()
     {
-        if(lName is not null && fName is not null && Ssn is not null){
-            pb.AddCustomer(lName, fName, (int)Ssn);
+        if(lName is not null && fName is not null && Ssn is not null)
+        {
+
+            var newCustomer = pb.CreateCustomer(lName, fName, Ssn);
+
+            pb.AddCustomer(newCustomer);
             lName = "";
             fName = "";
             Ssn = null;
