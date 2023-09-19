@@ -12,14 +12,13 @@ public class Car : Vehicle
 
     //public string Make {  get; set; }
     
-    public Car(int costDay, int costKM, int vehicleID, int odometer, string regNo, string model, string make) 
+    public Car(int? costDay, int? costKM, int? odometer, string regNo, string make, bool available) 
     {
         this.costDay = costDay;
         this.costKM = costKM;
-        this.vehicleID = vehicleID;
         this.odometer = odometer;
         this.regNo = regNo;
-        this.model = model;
+        this.available = available;
         this.make = make;
 
 

@@ -1,11 +1,13 @@
 ﻿@page "/kunder"
 
+
 @using Car_Business.Classes
 
 @inject BookingProcessor pb
 
 
 <PageTitle>Kunder</PageTitle>
+
 
 
 @if(alert)
@@ -93,6 +95,8 @@
 
 
 @code {
+    
+    
 
     bool alert = false;
 
@@ -129,5 +133,6 @@
         alert = false;
     }
 
+    
 
 }

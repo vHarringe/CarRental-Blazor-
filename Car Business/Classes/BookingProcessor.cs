@@ -3,12 +3,15 @@ using Car_Rental.Data.Classes;
 using Car_Rental.Common.Interfaces;
 using Car_Rental.Common.Classes;
 using Car_Rental.Common.Enums;
-
+using System.Collections.Generic;
 
 namespace Car_Business.Classes
 {
     public class BookingProcessor
     {
+        public readonly VehicleTypes VehicleType;
+
+
         public readonly IData _db;
         
 
@@ -27,10 +30,19 @@ namespace Car_Business.Classes
 
         }
 
-        public void CreateVehicle()
+        public Car CreateCar(int? costDay, int? costKM, int? odometer, string regNo, string make, bool available)
+        {
+            Car newVehicle = new Car(costDay, costKM, odometer,  regNo, make, available);
+
+            return newVehicle;
+        }
+
+        public List<VehicleTypes> GetEnums<T>(T item) 
         {
 
+            _db.Add(item);
 
+            return _db._vehicleTypes;
         }
       
 
@@ -40,6 +52,10 @@ namespace Car_Business.Classes
 
             _db.Add(item);
 
+        }
+        public void AddVehicle<T>(T item)
+        {
+            _db.Add(item);
         }
       
 

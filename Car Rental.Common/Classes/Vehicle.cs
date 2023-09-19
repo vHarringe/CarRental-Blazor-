@@ -10,21 +10,13 @@ namespace Car_Rental.Common.Classes;
 
 public class Vehicle : IVehicle
 {
-    public int costDay { get; set; }
-    public int costKM { get; set; }
-    public int vehicleID { get; set; }
-    public int odometer { get; set; }
+    public int? costDay { get; set; }
+    public int? costKM { get; set; }
+    
+    public int? odometer { get; set; }
     public string regNo { get; set; }
-    public string model { get; set; }
+  
     public string make { get; set; }
 
-
-
-    public Vehicle() 
-    {
-        
-    
-    }
-
-
+    public bool available { get; set; }
 }

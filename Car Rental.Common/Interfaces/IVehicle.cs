@@ -9,13 +9,14 @@ namespace Car_Rental.Common.Interfaces
     public interface IVehicle
     {
 
-        string model { get; }
+       
         string make { get; }
-        int costDay { get;}
-        int costKM { get;}
-        int vehicleID { get;}
+        int? odometer { get; }
+        int? costDay { get;}
+        int? costKM { get;}
+        string regNo { get;}
 
-
+        bool available { get; }
 
 
     }

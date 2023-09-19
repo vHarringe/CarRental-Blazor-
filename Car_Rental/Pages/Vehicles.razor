@@ -1,5 +1,7 @@
 ﻿@page "/fordon"
 @using Car_Business.Classes
+@using Car_Rental.Common.Enums;
+
 
 @inject BookingProcessor pb
 
@@ -23,27 +25,37 @@
                         <input type="text" class="form-control" id="förnamnInput" @bind="make">
                     </div>
                     <div class="mb-3">
-                        <label for="efternamnInput" class="form-label">Model</label>
-                        <input type="text" class="form-control" id="efternamnInput" @bind="model">
+                        <label for="costDay" class="form-label">costDay</label>
+                        <input type="text" class="form-control" id="costDay" @bind="costDay">
                     </div>
                     <div class="mb-3">
-                        <label for="SSNInput" class="form-label">costDay</label>
-                        <input type="text" class="form-control" id="SSNInput" @bind="costDay">
+                        <label for="odometer" class="form-label">Odometer</label>
+                        <input type="text" class="form-control" id="SSNInput" @bind="odometer">
                     </div>
                     <div class="mb-3">
                         <label for="SSNInput" class="form-label">costKM</label>
                         <input type="text" class="form-control" id="SSNInput" @bind="costKM">
                     </div>
                     <div class="mb-3">
-                        <label for="SSNInput" class="form-label">Vehicle ID</label>
-                        <input type="text" class="form-control" id="SSNInput" @bind="vehicleID">
+                        <label for="SSNInput" class="form-label">Registration number</label>
+                        <input type="text" class="form-control" id="SSNInput" @bind="regNo">
+                    </div>
+                    <div>
+                        <label for="VehicleSelect" class="form-label">Vehicle type</label>
+                        <select class="form-select" aria-label="Default select example" @bind="vehicleSelect">
+                            @foreach(var a in pb._db._vehicleTypes)
+                            {
+                                <option value="1">@a</option>
+                            }
+
+                        </select>
                     </div>
 
                 </form>
             </div>
             <div class="modal-footer">
 
-                <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" @onclick="AddVehicle">registrera ny</button>
+                <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" @onclick="SubmitVehicle">registrera ny</button>
             </div>
         </div>
     </div>
@@ -56,25 +68,115 @@
 
 </p>
 
+<div>
+
+    <table class="table float-left table-striped">
+        <thead>
+            <tr>
+                <th>RegNo.</th>
+                <th>Make</th>
+                <th>Odometer</th>
+                <th>cost/day</th>
+                <th>cost/KM</th>
+                <th>Action</th>
+
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach(var a in pb._db._vehicles)
+            {
+                <tr>
+                    <td>@a.regNo</td>
+                    <td>@a.make</td>
+                     <td>@a.odometer</td>
+                    <td>@a.costDay</td>
+                    <td>@a.costKM</td>
+                    @if (a.available)
+                    {   
+                        <td>
+                            <select class="form-select" aria-label="Default select example">
+                            <option selected>Customer</option>
+                            <option value="1">One</option>
+                            <option value="2">Two</option>
+                            <option value="3">Three</option>
+                        </select>
+                        </td>
+                        <td><button type="button" class="btn btn-primary"> Order</button></td>
+                    }
+                    else
+                    {
+                        <td>
+                            <select class="form-select" aria-label="Disabled select example" disabled>
+                                <option selected>Open this select menu</option>
+                                <option value="1">One</option>
+                                <option value="2">Two</option>
+                                <option value="3">Three</option>
+                            </select>
+                        </td>
+                        <td><button type="button" class="btn btn-success">Return</button></td>
+                    }
+
+                </tr>
+            }
+
+
+        </tbody>
+    </table>
+
+</div>
+
 
 
 @code 
 {
-    private string? make;
-    private string? model;
-    private int? costDay;
-    private int? costKM;
-    private int? vehicleID;
+    bool alert = false;
 
-    private void AddVehicle()
+    public int? costDay;
+    public int? costKM;
+    public int? odometer;
+    public string? regNo;
+    public string? make;
+
+
+
+
+    private char? vehicleSelect;
+
+
+    private void SubmitVehicle()
     {
-       
+        if (vehicleSelect == '1' || vehicleSelect == '2' || vehicleSelect == '3')
+        {
+            if (costDay != null && costKM != null && odometer != null && regNo != null && make != null)
+            {
+               
+                pb.AddVehicle(pb.CreateCar(costDay, costKM, odometer, regNo, make, true));
 
+                costDay = null;
+                costKM = null;
+                odometer = null;
+                regNo = null;
+                make = null;
+
+
+            }
+            else
+                alert = true;
+
+
+
+        }
+        else if (vehicleSelect == '4')
+        {
+
+        }
+        else
+            alert = true;
 
 
 
     }
-
 
 
 }

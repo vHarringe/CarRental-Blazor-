@@ -14,4 +14,6 @@ namespace Car_Rental.Common.Enums
         Motorcycle
 
     }
+
+    
 }
