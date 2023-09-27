@@ -2,6 +2,7 @@
 
 
 @using Car_Business.Classes
+@using Car_Rental.Common.Interfaces;
 
 @inject BookingProcessor pb
 
@@ -78,10 +79,10 @@
             @foreach (var test in pb.GetPersons())
         {
             <tr>
-                <td>@test.firstName</td>
-                <td>@test.lastName</td>
+                <td>@test.FirstName</td>
+                <td>@test.LastName</td>
                 <td>@test.Ssn</td>
-                <td>@test.customerId</td>
+                <td>@test.CustomerId</td>
                 
             </tr>
         }
@@ -103,7 +104,7 @@
     public int currentCount = 0;
     private string? lName = null;
     private string? fName = null;
-    private string? customerId = null;
+    private int? CustomerId = null;
     private int? Ssn = null;
 
 

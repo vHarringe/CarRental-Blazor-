@@ -8,11 +8,11 @@ namespace Car_Rental.Common.Interfaces
 {
     public interface IPerson
     {
-        public string lastName { get; set; }
-        public string firstName { get; set; }
+        public string LastName { get; set; }
+        public string FirstName { get; set; }
         public int Ssn { get; set; }
         
-        public string customerId { get; set; }
+        public int CustomerId { get; set; }
 
 
 

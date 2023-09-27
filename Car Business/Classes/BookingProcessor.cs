@@ -24,28 +24,39 @@ namespace Car_Business.Classes
         public Customer CreateCustomer(string lName, string fName, int? SSN)
         {
            Customer newCustomer = new Customer(lName, fName, SSN);
-            newCustomer.customerId = $"#{(_db._persons.Count() + 1)}";
+            newCustomer.CustomerId = (_db.Get<IPerson>().Count() + 1);
 
             return newCustomer;
 
         }
 
-        public Car CreateCar(int? costDay, int? costKM, int? odometer, string regNo, string make, bool available)
+        public Car CreateCar(int? costDay, int? costKM, int? odometer, string regNo, string make, bool available, VehicleTypes? vehicleType)
         {
-            Car newVehicle = new Car(costDay, costKM, odometer,  regNo, make, available);
+            Car newVehicle = new Car(costDay, costKM, odometer,  regNo, make, available, vehicleType);
 
             return newVehicle;
         }
 
-        public List<VehicleTypes> GetEnums<T>(T item) 
+        public Motorcycle CreateMotorcycle(int? costDay, int? costKM, int? odometer, string regNo, string make, bool available, VehicleTypes? vehicleType)
         {
 
-            _db.Add(item);
+            Motorcycle newMotorcycle = new(costDay, costKM,odometer,regNo,make,available,vehicleType);
+            return newMotorcycle;
 
-            return _db._vehicleTypes;
+
         }
-      
 
+        public Booking CreateBooking(int? customer, IVehicle vehicle)
+        {
+            Booking newBooking = new Booking(customer, vehicle);
+            newBooking.BookingId = _db.Get<IBooking>().Count() + 1;
+            return newBooking;
+
+
+        }
+
+
+      
 
         public void AddCustomer<T>(T item)
         {
@@ -57,14 +68,43 @@ namespace Car_Business.Classes
         {
             _db.Add(item);
         }
-      
 
+        public void AddBooking<T>(T item)
+        {
+            _db.Add(item);
+        }
+
+        /*
         public List<IPerson> GetPersons()
         {
             return _db._persons; 
         }
+        */
+
+        public List<IBooking> GetBookings()
+        {
+            return _db.Get<IBooking>().ToList();
+
+        }
+
+        public List<IPerson> GetPersons()
+        {
+           
+            return _db.Get<IPerson>().ToList();
+        }
+
+        public List<IVehicle> GetVehicles() 
+        { 
+            return _db.Get<IVehicle>().ToList();
         
-  
+        }
+        
+        public List<VehicleTypes> GetVehicleTypes()
+        {
+
+            return _db.Get<VehicleTypes>().ToList();    
+        }
+
 
     }
 }

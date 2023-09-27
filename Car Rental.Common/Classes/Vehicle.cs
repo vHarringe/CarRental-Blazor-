@@ -1,4 +1,5 @@
-﻿using Car_Rental.Common.Interfaces;
+﻿using Car_Rental.Common.Enums;
+using Car_Rental.Common.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,4 +20,9 @@ public class Vehicle : IVehicle
     public string make { get; set; }
 
     public bool available { get; set; }
+
+    public VehicleTypes? VehicleType { get; set; }
+    
+
+    public int? SelectedCustomerId {  get; set; }
 }

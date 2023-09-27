@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Car_Rental.Common.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,6 +18,8 @@ namespace Car_Rental.Common.Interfaces
         string regNo { get;}
 
         bool available { get; }
+        int? SelectedCustomerId { get; set; }
+        public VehicleTypes? VehicleType { get; set; }
 
 
     }

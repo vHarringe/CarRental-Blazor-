@@ -10,16 +10,18 @@ namespace Car_Rental.Common.Classes;
 
 public class Customer : IPerson
 {
-    public string? lastName { get; set; }
-    public string? firstName { get; set; }
+    public string LastName { get; set; }
+    public string FirstName { get; set; }
     public int Ssn { get; set; }
 
-    public string? customerId { get; set; }
+    public int CustomerId { get; set; }
+
+   
 
     public Customer(string lName, string fName, int? SSN)
     {
-        lastName = lName;
-        firstName = fName;
+        LastName = lName;
+        FirstName = fName;
         Ssn = (int)SSN;
             
     }

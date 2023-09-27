@@ -1,11 +1,20 @@
 ﻿@page "/fordon"
-@using Car_Business.Classes
-@using Car_Rental.Common.Enums;
+@using Car_Rental.Common.Interfaces;
 
 
 @inject BookingProcessor pb
 
 <!-- Registrera ny -->
+
+@if(alert)
+{
+    <div class="alert alert-warning" role="alert">
+        A simple warning alert—check it out!
+        <button type="button" class="btn-close float-end" aria-label="Close" @onclick="CloseAlert"></button>
+    </div>
+    
+}
+
 <button type="button" class="btn btn-primary mb-5" data-bs-toggle="modal" data-bs-target="#exampleModal">
     Registrera nytt fordon
 </button>
@@ -21,31 +30,32 @@
             <div class="modal-body mb-2">
                 <form>
                     <div class="mb-3">
-                        <label for="förnamnInput" class="form-label">Make</label>
-                        <input type="text" class="form-control" id="förnamnInput" @bind="make">
+                        <label for="fornamnInput" class="form-label">Make</label>
+                        <input type="text" class="form-control" id="fornamnInput" @bind="make">
                     </div>
                     <div class="mb-3">
                         <label for="costDay" class="form-label">costDay</label>
                         <input type="text" class="form-control" id="costDay" @bind="costDay">
                     </div>
                     <div class="mb-3">
-                        <label for="odometer" class="form-label">Odometer</label>
-                        <input type="text" class="form-control" id="SSNInput" @bind="odometer">
+                        <label for="OdometerInput" class="form-label">Odometer</label>
+                        <input type="text" class="form-control" id="OdometerInput" @bind="odometer">
                     </div>
                     <div class="mb-3">
-                        <label for="SSNInput" class="form-label">costKM</label>
-                        <input type="text" class="form-control" id="SSNInput" @bind="costKM">
+                        <label for="CostKMInput" class="form-label">costKM</label>
+                        <input type="text" class="form-control" id="CostKMInput" @bind="costKM">
                     </div>
                     <div class="mb-3">
-                        <label for="SSNInput" class="form-label">Registration number</label>
-                        <input type="text" class="form-control" id="SSNInput" @bind="regNo">
+                        <label for="regInput" class="form-label">Registration number</label>
+                        <input type="text" class="form-control" id="regInput" @bind="regNo">
                     </div>
                     <div>
                         <label for="VehicleSelect" class="form-label">Vehicle type</label>
-                        <select class="form-select" aria-label="Default select example" @bind="vehicleSelect">
-                            @foreach(var a in pb._db._vehicleTypes)
+                        <select class="form-select" id="VehicleSelect" aria-label="Default select example" @bind="vehicleType">
+                            <option>Select vehicle type</option>
+                            @foreach(var a in pb.GetVehicleTypes())
                             {
-                                <option value="1">@a</option>
+                                <option value="@a">@a</option>
                             }
 
                         </select>
@@ -61,18 +71,13 @@
     </div>
 </div>
 
-<p>
-    Skriv in alla detaljer, sen i slutet så får du välja Enum Aka vehiclyType. 
-    baserat på vilken du väljer byter "skapa fordon"-knappen metod. antingen car eller motorcycle
-    ezpz
 
-</p>
-
+<!--Vehicle Table-->
 <div>
 
-    <table class="table float-left table-striped">
+    <table class="table table-striped">
         <thead>
-            <tr>
+            <tr >
                 <th>RegNo.</th>
                 <th>Make</th>
                 <th>Odometer</th>
@@ -84,38 +89,87 @@
         </thead>
         <tbody>
 
-            @foreach(var a in pb._db._vehicles)
+            @foreach (var a in pb.GetVehicles())
             {
-                <tr>
-                    <td>@a.regNo</td>
+
+                
+
+                <tr class="align-middle">
+                    <td>
+                        @a.regNo
+                    @if (a.VehicleType == VehicleTypes.Van || a.VehicleType == VehicleTypes.Combi || a.VehicleType == VehicleTypes.Sedan)
+                    {
+                            <img src="icons/car.png" style="width: 25px"  class="ms-2" />
+
+                           
+                    }
+                    else
+                    {
+                            <img src="icons/transportation.png" style="width: 23px" class="ms-2" />
+                    }
+
+                    </td>
                     <td>@a.make</td>
-                     <td>@a.odometer</td>
+                    <td>@a.odometer</td>
                     <td>@a.costDay</td>
                     <td>@a.costKM</td>
                     @if (a.available)
-                    {   
+                    {
                         <td>
-                            <select class="form-select" aria-label="Default select example">
-                            <option selected>Customer</option>
-                            <option value="1">One</option>
-                            <option value="2">Two</option>
-                            <option value="3">Three</option>
-                        </select>
+                            <select class="form-select" aria-label="Default select example" @bind="a.SelectedCustomerId">
+                                <option value="" disabled selected>Select a customer</option>
+                                @foreach (var b in pb.GetPersons())
+                                {
+                                    <option value="@b.CustomerId">@b.FirstName @b.LastName</option>
+                                }
+                                
+                            </select>
                         </td>
-                        <td><button type="button" class="btn btn-primary"> Order</button></td>
+                        <td><button type="button" class="btn btn-primary btn-sm" @onclick="() => SubmitBooking(a.SelectedCustomerId, a)">Order</button></td>
                     }
                     else
                     {
                         <td>
-                            <select class="form-select" aria-label="Disabled select example" disabled>
-                                <option selected>Open this select menu</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
-                            </select>
+                            <Input type="text" class="form-control" placeholder="Odometer on return"/>
                         </td>
-                        <td><button type="button" class="btn btn-success">Return</button></td>
+                        <td><button type="button" class="btn btn-success btn-sm mt-1">Return</button></td>
                     }
+
+                </tr>
+               
+            }
+
+
+        </tbody>
+    </table>
+</div> 
+
+
+
+<h3 class="mt-5">Bookings</h3>
+
+<div>
+
+    <table class="table float-left table-striped">
+        <thead>
+            <tr>
+                <th>Last Name</th>
+                <th>First Name</th>
+                <th>SSN</th>
+                <th>Customer ID</th>
+
+            </tr>
+        </thead>
+        <tbody>
+
+
+            @foreach (var a in pb.GetBookings())
+            {
+                <tr>
+                    <td>@a.BookingDate</td>
+                    <td>@a.Vehicle.make</td>
+                    <td>@a.Vehicle.odometer</td>
+                    <td>@a.CustomerId</td>
 
                 </tr>
             }
@@ -128,6 +182,9 @@
 
 
 
+
+
+
 @code 
 {
     bool alert = false;
@@ -137,46 +194,69 @@
     public int? odometer;
     public string? regNo;
     public string? make;
+    VehicleTypes? vehicleType;
 
-
-
-
-    private char? vehicleSelect;
-
+    void CloseAlert()
+    {
+        alert = false;
+    }
 
     private void SubmitVehicle()
     {
-        if (vehicleSelect == '1' || vehicleSelect == '2' || vehicleSelect == '3')
+        alert = false;
+        if (costDay != null && costKM != null && odometer != null && regNo != null && make != null && vehicleType != null)
         {
-            if (costDay != null && costKM != null && odometer != null && regNo != null && make != null)
+
+
+            if (vehicleType == VehicleTypes.Sedan || vehicleType == VehicleTypes.Van || vehicleType == VehicleTypes.Combi)
             {
-               
-                pb.AddVehicle(pb.CreateCar(costDay, costKM, odometer, regNo, make, true));
+
+                pb.AddVehicle(pb.CreateCar(costDay, costKM, odometer, regNo, make, true, vehicleType));
 
                 costDay = null;
                 costKM = null;
                 odometer = null;
                 regNo = null;
                 make = null;
+                vehicleType = null;
 
 
             }
-            else
-                alert = true;
+            else if (vehicleType == VehicleTypes.Motorcycle)
+            {
+                pb.AddVehicle(pb.CreateMotorcycle(costDay, costKM, odometer, regNo, make, true, vehicleType));
+                costDay = null;
+                costKM = null;
+                odometer = null;
+                regNo = null;
+                make = null;
+                vehicleType = null;
 
+            }
 
-
-        }
-        else if (vehicleSelect == '4')
-        {
 
         }
         else
+        {
+            costDay = null;
+            costKM = null;
+            odometer = null;
+            regNo = null;
+            make = null;
+            vehicleType = null;
             alert = true;
 
 
+        }
+        
 
     }
 
+    private void SubmitBooking(int? customerId, IVehicle car)
+    {
+        pb.AddBooking(pb.CreateBooking(customerId, car));
+
+
+    }
 
 }

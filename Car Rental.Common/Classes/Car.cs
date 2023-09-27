@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Car_Rental.Common.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,7 +13,7 @@ public class Car : Vehicle
 
     //public string Make {  get; set; }
     
-    public Car(int? costDay, int? costKM, int? odometer, string regNo, string make, bool available) 
+    public Car(int? costDay, int? costKM, int? odometer, string regNo, string make, bool available, VehicleTypes? vehicleType) 
     {
         this.costDay = costDay;
         this.costKM = costKM;
@@ -20,7 +21,7 @@ public class Car : Vehicle
         this.regNo = regNo;
         this.available = available;
         this.make = make;
-
+        this.VehicleType = vehicleType;
 
     }
     
