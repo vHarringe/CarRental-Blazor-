@@ -12,6 +12,8 @@ public class Booking : IBooking
   
     public int? BookingId { get; set; }
     public int? CustomerId { get; set; }
+
+    public Customer Customer { get; set; }
     public IVehicle Vehicle { get; set; }
     public DateTime BookingDate { get; set; }
 
