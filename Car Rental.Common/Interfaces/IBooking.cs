@@ -20,7 +20,7 @@ namespace Car_Rental.Common.Interfaces
             <th>RegNo</th>
             <th>Customer</th>
             <th>KM Rented</th>
-            <th>KM Returned</th>
+            <th>KM Returned</th>d
             <th>rented</th>
             <th>returned</th>
             <th>Cost</th>
