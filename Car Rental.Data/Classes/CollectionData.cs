@@ -9,7 +9,7 @@ namespace Car_Rental.Data.Classes
 {
     public class CollectionData : IData
     {
-        List<IPerson> _persons { get; } = new List<IPerson>();
+        List<IPerson> _persons { get; } = new List<IPerson>(); 
 
         List<IBooking> _bookings { get; } = new List<IBooking>();
         List<IVehicle> _vehicles { get; }  = new List<IVehicle>();
