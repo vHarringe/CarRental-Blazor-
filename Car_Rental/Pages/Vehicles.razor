@@ -6,6 +6,8 @@
 
 <!-- Registrera ny -->
 
+
+
 @if(alert)
 {
     <div class="alert alert-warning" role="alert">
@@ -15,9 +17,13 @@
     
 }
 
-<button type="button" class="btn btn-primary mb-5" data-bs-toggle="modal" data-bs-target="#exampleModal">
-    Registrera nytt fordon
-</button>
+
+<!--Modal knapp+modal-->
+<div>
+    <button type="button" class="btn btn-primary mb-5" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        Registrera nytt fordon
+    </button>
+</div>
 
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 
@@ -72,6 +78,28 @@
 </div>
 
 
+<div class="row">
+    <div class="form-group col-2 me-5">
+        <label for="priceRange">Max Cost/day</label>
+        <input type="range" class="form-range" id="priceRange" min="@minCost" max="@maxCost" step="100" @bind="costDayFilter" @oninput="UpdatePrice" />
+
+        <span class="badge bg-primary">@costDayFilter</span>
+    </div>
+    <div class="form-group col-2">
+        <label for="priceRange">Max Odometer</label>
+        <input type="range" class="form-range" id="priceRange" min="@minOdometer" max="@maxOdometer" step="1000" @bind="odometerFilter" @oninput="UpdateOdometer" />
+
+        <span class="badge bg-primary">@odometerFilter</span>
+
+
+    </div>
+    <div class="col"></div>
+
+
+</div>
+
+<hr />
+
 <!--Vehicle Table-->
 <div>
 
@@ -89,10 +117,16 @@
         </thead>
         <tbody>
 
-            @foreach (var a in pb.GetVehicles())
+            @foreach (var a in pb.GetFilteredVehicles(costDayFilter, odometerFilter)) 
+            /* en metod på denna 
+            razorsida som man använder istället. olika lamda för olika input.
+            kan vara t.ex 1 för "CostDay". med parametrar som bestämmer vad get metoden ska filtrera.
+            kanske Enums?
+
+            */
             {
 
-                
+
 
                 <tr class="align-middle">
                     <td>
@@ -160,7 +194,7 @@
                 <th>rented</th>
                 <th>returned</th>
                 <th>Cost</th>
-                <th>Status</th>
+                <th>Status</th> 
 
             </tr>
         </thead>
@@ -170,10 +204,15 @@
             @foreach (var a in pb.GetBookings())
             {
                 <tr>
-                    <td>@a.BookingDate</td>
-                    <td>@a.Vehicle.make</td>
+                    <td>@a.Vehicle.regNo</td>
+                    <td>@a.Customer.LastName @a.Customer.FirstName (@a.Customer.Ssn)</td>
                     <td>@a.Vehicle.odometer</td>
-                    <td>@a.CustomerId</td>
+                    <td>@a.KMReturned</td>
+                    <td>@a.BookingDate</td>
+                    <td>@a.BookingReturned</td>
+                    <td>@a.TotalCost</td>
+
+                    <td>@a.Status</td> <!--bootstrap Badge här. success/Warning ?-->
 
                 </tr>
             }
@@ -188,9 +227,18 @@
 
 
 
-
 @code 
 {
+
+    int maxCost;
+    int minCost;
+    int costDayFilter;
+
+    int maxOdometer;
+    int minOdometer;
+    int odometerFilter;
+
+
     bool alert = false;
 
     public int? costDay;
@@ -200,10 +248,50 @@
     public string? make;
     VehicleTypes? vehicleType;
 
+
+
+    protected override void OnInitialized()
+    {
+        var max = pb.GetVehicles().OrderByDescending(c => c.costDay).FirstOrDefault();
+        maxCost = max != null? Convert.ToInt32(max.costDay): 100;
+        var min = pb.GetVehicles().OrderBy(c => c.costDay).FirstOrDefault();
+        minCost = min != null ? Convert.ToInt32(min.costDay) : 0;
+
+        costDayFilter = maxCost;
+
+        var maxOdo = pb.GetVehicles().OrderByDescending(o => o.odometer).FirstOrDefault();
+        maxOdometer = maxOdo != null ? Convert.ToInt32(maxOdo.odometer) : 100;
+        var minOdo = pb.GetVehicles().OrderBy(o => o.odometer).FirstOrDefault();
+        minOdometer = minOdo != null ? Convert.ToInt32(minOdo.odometer) : 100;
+
+        odometerFilter = maxOdometer;
+
+    }
+
+
+
     void CloseAlert()
     {
         alert = false;
     }
+
+    private void UpdatePrice(ChangeEventArgs? price)
+    {
+        if (price != null && price.Value != null)
+        {
+            int.TryParse(price.Value.ToString(), out costDayFilter);
+        }
+
+    }
+    private void UpdateOdometer(ChangeEventArgs? odometer)
+    {
+        if (odometer != null && odometer.Value != null)
+        {
+            int.TryParse(odometer.Value.ToString(), out odometerFilter);
+        }
+
+    }
+
 
     private void SubmitVehicle()
     {
@@ -252,13 +340,15 @@
 
 
         }
-        
+
 
     }
 
     private void SubmitBooking(int? customerId, IVehicle car)
     {
-        pb.AddBooking(pb.CreateBooking(customerId, car));
+        var bookingCustomer = pb.GetPersons().Single(a => a.CustomerId == customerId);
+        pb.AddBooking(pb.CreateBooking(bookingCustomer, car));
+        car.available = false;
 
 
     }

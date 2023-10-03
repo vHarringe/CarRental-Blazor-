@@ -15,4 +15,8 @@
     <ProjectReference Include="..\Car Business\Car Rental.Business.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\css\Slider\" />
+  </ItemGroup>
+
 </Project>

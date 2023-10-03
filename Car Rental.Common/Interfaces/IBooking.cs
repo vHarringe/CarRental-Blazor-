@@ -10,11 +10,20 @@ namespace Car_Rental.Common.Interfaces
     public interface IBooking
     {
         int? BookingId { get; set; }
-        int? CustomerId { get; set; }
+        
+        int? KMRented { get; set; }
 
-        public Customer Customer { get; set; }
+        int? KMReturned { get; set; }
+
+        int? TotalCost { get; set; }
+
+        bool Status {  get; set; }
+
+        public IPerson Customer { get; set; }
         IVehicle Vehicle { get; set; }
         DateTime BookingDate { get; set; }
+
+        DateTime? BookingReturned {  get; set; }
 
         /* 
             <th>RegNo</th>

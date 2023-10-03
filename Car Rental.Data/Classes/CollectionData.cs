@@ -2,6 +2,7 @@
 using Car_Rental.Common.Classes;
 using Car_Rental.Common.Enums;
 using Car_Rental.Common.Interfaces;
+using System.Linq;
 using System.Linq.Expressions;
 
 namespace Car_Rental.Data.Classes
@@ -27,8 +28,8 @@ namespace Car_Rental.Data.Classes
             _persons.Add(customer3);
 
             Car car1 = new Car(200, 15, 4500, "KYP404", "Renault", false, VehicleTypes.Sedan);
-            Car car2 = new Car(300, 10, 15500, "ARL999", "Kia", true, VehicleTypes.Van);
-            Car car3 = new Car(3500, 300, 2200, "GAP613", "Ferrari", true, VehicleTypes.Combi);
+            Car car2 = new Car(1000, 10, 15500, "ARL999", "Kia", true, VehicleTypes.Van);
+            Car car3 = new Car(2500, 300, 2200, "GAP613", "Ferrari", true, VehicleTypes.Combi);
 
             Motorcycle m1 = new Motorcycle(450, 20, 1500, "JUS666", "Yamaha", true, VehicleTypes.Motorcycle);
             
@@ -53,10 +54,30 @@ namespace Car_Rental.Data.Classes
         {
 
             if (typeof(T) == typeof(IPerson))
+            {
+                if (expression != null)
+                {
+                    var filter = expression.Compile();
+                    return _persons.Cast<T>().Where(filter).ToList();
+                }
                 return _persons.Cast<T>().ToList();
+            }
 
             else if (typeof(T) == typeof(IVehicle))
-                return _vehicles.Cast<T>().ToList();
+            {
+                if(expression != null)
+                {
+                    var filter = expression.Compile();
+                    return _vehicles.Cast<T>().Where(filter).ToList();
+                }
+                else
+                {
+                    return _vehicles.Cast<T>().ToList();
+                }
+                
+                
+            }
+               
 
             else if (typeof(T) == typeof(IBooking))
                 return _bookings.Cast<T>().ToList();

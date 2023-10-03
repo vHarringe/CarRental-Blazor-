@@ -4,6 +4,7 @@ using Car_Rental.Common.Interfaces;
 using Car_Rental.Common.Classes;
 using Car_Rental.Common.Enums;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 
 namespace Car_Business.Classes
 {
@@ -46,10 +47,10 @@ namespace Car_Business.Classes
 
         }
 
-        public Booking CreateBooking(int? customer, IVehicle vehicle)
+        public Booking CreateBooking(IPerson customer, IVehicle vehicle)
         {
-            Booking newBooking = new Booking(customer, vehicle);
-            newBooking.BookingId = _db.Get<IBooking>().Count() + 1;
+            Booking newBooking = new Booking(vehicle, customer);
+            newBooking.BookingId = _db.Get<IBooking>().Count() == 0 ? 1 : _db.Get<IBooking>().Count() + 1;
             return newBooking;
 
 
@@ -93,12 +94,18 @@ namespace Car_Business.Classes
             return _db.Get<IPerson>().ToList();
         }
 
-        public List<IVehicle> GetVehicles() 
+        public List<IVehicle> GetVehicles(Expression<Func<IVehicle, bool>>? expression = null) 
         { 
-            return _db.Get<IVehicle>().ToList();
+            return _db.Get<IVehicle>(expression);
         
         }
-        
+
+        public List<IVehicle> GetFilteredVehicles(int costDayFilter, int odometerFilter)
+        {
+            return _db.Get<IVehicle>(v => v.costDay <= costDayFilter && v.odometer <= odometerFilter);
+
+        }
+
         public List<VehicleTypes> GetVehicleTypes()
         {
 

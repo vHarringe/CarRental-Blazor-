@@ -17,7 +17,7 @@ namespace Car_Rental.Common.Interfaces
         int? costKM { get;}
         string regNo { get;}
 
-        bool available { get; }
+        bool available { get; set; }
         int? SelectedCustomerId { get; set; }
         public VehicleTypes? VehicleType { get; set; }
 
