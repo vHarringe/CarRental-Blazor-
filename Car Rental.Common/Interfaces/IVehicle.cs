@@ -12,7 +12,7 @@ namespace Car_Rental.Common.Interfaces
 
        
         string make { get; }
-        int? odometer { get; }
+        int? odometer { get; set; }
         int? costDay { get;}
         int? costKM { get;}
         string regNo { get;}

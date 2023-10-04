@@ -56,7 +56,23 @@ namespace Car_Business.Classes
 
         }
 
+        public void ReturnVehicle(string vehicle, int? odometerReturn)
+        {
+            var cancelBooking = _db.Get<IBooking>().Single(a => a.Vehicle.regNo == vehicle);
 
+            cancelBooking.TotalCost = cancelBooking.Vehicle.costKM * (odometerReturn - cancelBooking.Vehicle.odometer) + cancelBooking.Vehicle.costDay;
+            cancelBooking.Status = true;
+            cancelBooking.Vehicle.available = true;
+            cancelBooking.BookingReturned = DateTime.Now;
+            cancelBooking.KMReturned = odometerReturn;
+
+            var car = _db.Get<IVehicle>().Single(a => a.regNo == vehicle);
+            car.odometer = odometerReturn;
+            
+
+
+
+        }
       
 
         public void AddCustomer<T>(T item)
@@ -90,14 +106,12 @@ namespace Car_Business.Classes
 
         public List<IPerson> GetPersons()
         {
-           
             return _db.Get<IPerson>().ToList();
         }
 
         public List<IVehicle> GetVehicles(Expression<Func<IVehicle, bool>>? expression = null) 
         { 
             return _db.Get<IVehicle>(expression);
-        
         }
 
         public List<IVehicle> GetFilteredVehicles(int costDayFilter, int odometerFilter)

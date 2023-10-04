@@ -87,7 +87,7 @@
     </div>
     <div class="form-group col-2">
         <label for="priceRange">Max Odometer</label>
-        <input type="range" class="form-range" id="priceRange" min="@minOdometer" max="@maxOdometer" step="1000" @bind="odometerFilter" @oninput="UpdateOdometer" />
+        <input type="range" class="form-range" id="priceRange" min="@minOdometer" max="@maxOdometer" step="100" @bind="odometerFilter" @oninput="UpdateOdometer" />
 
         <span class="badge bg-primary">@odometerFilter</span>
 
@@ -164,9 +164,10 @@
                     else
                     {
                         <td>
-                            <Input type="text" class="form-control" placeholder="Odometer on return"/>
+                            
+                            <input type="text" class="form-control" placeholder="Odometer on return" @bind="odometerReturn"/>
                         </td>
-                        <td><button type="button" class="btn btn-success btn-sm mt-1">Return</button></td>
+                        <td><button type="button" class="btn btn-success btn-sm mt-1" @onclick="(() => ReturnVehicle(a.regNo, odometerReturn))">Return</button></td>
                     }
 
                 </tr>
@@ -206,13 +207,22 @@
                 <tr>
                     <td>@a.Vehicle.regNo</td>
                     <td>@a.Customer.LastName @a.Customer.FirstName (@a.Customer.Ssn)</td>
-                    <td>@a.Vehicle.odometer</td>
+                    <td>@a.KMRented</td>
                     <td>@a.KMReturned</td>
                     <td>@a.BookingDate</td>
                     <td>@a.BookingReturned</td>
                     <td>@a.TotalCost</td>
 
-                    <td>@a.Status</td> <!--bootstrap Badge här. success/Warning ?-->
+                    @if(a.Status == false)
+                    {
+                        <td><span class="badge bg-warning">Active</span></td>
+                    }
+                    else
+                    {
+                       <td><span class="badge bg-success">Closed</span></td>
+
+                    }
+                   
 
                 </tr>
             }
@@ -234,10 +244,12 @@
     int minCost;
     int costDayFilter;
 
+
     int maxOdometer;
     int minOdometer;
     int odometerFilter;
 
+    int? odometerReturn; 
 
     bool alert = false;
 
@@ -350,6 +362,18 @@
         pb.AddBooking(pb.CreateBooking(bookingCustomer, car));
         car.available = false;
 
+
+    }
+
+    private void ReturnVehicle(string vehicle, int? odometerReturn)
+    {
+        if(odometerReturn is not null)
+            pb.ReturnVehicle(vehicle, odometerReturn);
+
+        var maxOdo = pb.GetVehicles().OrderByDescending(o => o.odometer).FirstOrDefault();
+        maxOdometer = maxOdo != null ? Convert.ToInt32(maxOdo.odometer) : 100;
+
+        odometerFilter = maxOdometer;
 
     }
 
