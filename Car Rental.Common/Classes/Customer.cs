@@ -18,12 +18,12 @@ public class Customer : IPerson
 
    
 
-    public Customer(string lName, string fName, int? SSN)
+    public Customer(string lName, string fName, int? SSN, int Id)
     {
         LastName = lName;
         FirstName = fName;
         Ssn = (int)SSN;
-            
+        CustomerId = Id;
     }
 
 }

@@ -24,8 +24,11 @@ namespace Car_Business.Classes
 
         public Customer CreateCustomer(string lName, string fName, int? SSN)
         {
-           Customer newCustomer = new Customer(lName, fName, SSN);
-            newCustomer.CustomerId = (_db.Get<IPerson>().Count() + 1);
+            int newId = (_db.Get<IPerson>().Any() ? _db.Get<IPerson>().Max(p => p.CustomerId) + 1 : 1);
+
+
+            Customer newCustomer = new Customer(lName, fName, SSN, newId);
+            
 
             return newCustomer;
 
@@ -81,9 +84,9 @@ namespace Car_Business.Classes
             _db.Add(item);
 
         }
-        public void AddVehicle<T>(T item)
+        public void AddVehicle<T>(T item) where T : IVehicle
         {
-            _db.Add(item);
+            _db.Add<IVehicle>(item);
         }
 
         public void AddBooking<T>(T item)
