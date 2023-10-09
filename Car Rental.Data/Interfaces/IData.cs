@@ -13,8 +13,6 @@ namespace Car_Data
     public interface IData
     {
         
-        void AddCustomer(string lName, string fName, int SSN);
-
         public void Add<T>(T item);
 
         public List<T> Get<T>(Expression<Func<T, bool>>? expression = null);

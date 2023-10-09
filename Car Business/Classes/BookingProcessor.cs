@@ -78,10 +78,10 @@ namespace Car_Business.Classes
         }
       
 
-        public void AddCustomer<T>(T item)
+        public void AddCustomer<T>(T item) where T : IPerson
         {
 
-            _db.Add(item);
+            _db.Add<IPerson>(item);
 
         }
         public void AddVehicle<T>(T item) where T : IVehicle
@@ -89,9 +89,9 @@ namespace Car_Business.Classes
             _db.Add<IVehicle>(item);
         }
 
-        public void AddBooking<T>(T item)
+        public void AddBooking<T>(T item) where T : IBooking
         {
-            _db.Add(item);
+            _db.Add<IBooking>(item);
         }
 
         /*

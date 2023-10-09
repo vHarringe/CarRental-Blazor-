@@ -5,6 +5,52 @@
 @inject BookingProcessor pb
 
 <!-- Registrera ny -->
+@if (alertCustomer)
+{
+    <div class="alert alert-warning" role="alert">
+        A simple warning alert with <a href="#" class="alert-link">an example link</a>. Give it a click if you like.
+        <button type="button" class="btn-close float-end" @onclick="CloseAlertCustomer"></button>
+    </div>
+
+}
+
+
+
+<!-- Registrera ny kund -->
+
+
+<div class="modal fade" id="exampleModalCustomer" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Registrera ny kund</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body mb-2">
+                <form>
+                    <div class="mb-3">
+                        <label for="förnamnInput" class="form-label">Förnamn</label>
+                        <input type="text" class="form-control" id="förnamnInput" @bind="fName">
+                    </div>
+                    <div class="mb-3">
+                        <label for="efternamnInput" class="form-label">Efternamn</label>
+                        <input type="text" class="form-control" id="efternamnInput" @bind="lName">
+                    </div>
+                    <div class="mb-3">
+                        <label for="SSNInput" class="form-label">SSN</label>
+                        <input type="text" class="form-control" id="SSNInput" @bind="Ssn">
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+
+                <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" @onclick="AddCustomer">registrera ny</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 
@@ -23,6 +69,9 @@
     <button type="button" class="btn btn-primary mb-5" data-bs-toggle="modal" data-bs-target="#exampleModal">
         Registrera nytt fordon
     </button>
+    <button type="button" class="btn btn-primary mb-5" data-bs-toggle="modal" data-bs-target="#exampleModalCustomer">
+        Registrera ny kund
+    </button>
 </div>
 
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -30,7 +79,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Registrera ny kund</h1>
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Registrera nytt fordon</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body mb-2">
@@ -239,6 +288,44 @@
 
 @code 
 {
+
+    bool alertCustomer = false;
+
+    public int currentCount = 0;
+    private string? lName = null;
+    private string? fName = null;
+    private int? CustomerId = null;
+    private int? Ssn = null;
+
+
+    private void AddCustomer()
+    {
+        if (lName is not null && fName is not null && Ssn is not null)
+        {
+
+            var newCustomer = pb.CreateCustomer(lName, fName, Ssn);
+
+            pb.AddCustomer(newCustomer);
+            lName = "";
+            fName = "";
+            Ssn = null;
+            alertCustomer = false;
+
+        }
+        else
+        {
+            alertCustomer = true;
+        }
+
+
+    }
+    private void CloseAlertCustomer()
+    {
+        alertCustomer = false;
+    }
+
+
+
 
     int maxCost;
     int minCost;

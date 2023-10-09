@@ -69,6 +69,7 @@ namespace Car_Rental.Data.Classes
         }
 
 
+
         public void Add<T>(T item)
         {
             Type targetType = typeof(T);
@@ -85,7 +86,7 @@ namespace Car_Rental.Data.Classes
            
         }
 
-        public void AddCustomer(string lName, string fName, int SSN) { }
+        
 
       
     }
