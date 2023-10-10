@@ -27,21 +27,21 @@ namespace Car_Business.Classes
             int newId = (_db.Get<IPerson>().Any() ? _db.Get<IPerson>().Max(p => p.CustomerId) + 1 : 1);
 
 
-            Customer newCustomer = new Customer(lName, fName, SSN, newId);
+            Customer newCustomer = new(lName, fName, SSN, newId);
             
 
             return newCustomer;
 
         }
 
-        public Car CreateCar(int? costDay, int? costKM, int? odometer, string regNo, string make, bool available, VehicleTypes? vehicleType)
+        public static Car CreateCar(int? costDay, int? costKM, int? odometer, string regNo, string make, bool available, VehicleTypes? vehicleType)
         {
-            Car newVehicle = new Car(costDay, costKM, odometer,  regNo, make, available, vehicleType);
+            Car newVehicle = new(costDay, costKM, odometer,  regNo, make, available, vehicleType);
 
             return newVehicle;
         }
 
-        public Motorcycle CreateMotorcycle(int? costDay, int? costKM, int? odometer, string regNo, string make, bool available, VehicleTypes? vehicleType)
+        public static Motorcycle CreateMotorcycle(int? costDay, int? costKM, int? odometer, string regNo, string make, bool available, VehicleTypes? vehicleType)
         {
 
             Motorcycle newMotorcycle = new(costDay, costKM,odometer,regNo,make,available,vehicleType);
@@ -52,12 +52,18 @@ namespace Car_Business.Classes
 
         public Booking CreateBooking(IPerson customer, IVehicle vehicle)
         {
-            Booking newBooking = new Booking(vehicle, customer);
-            newBooking.BookingId = _db.Get<IBooking>().Count() == 0 ? 1 : _db.Get<IBooking>().Count() + 1;
+            Booking newBooking = new(vehicle, customer)
+            {
+                BookingId = _db.Get<IBooking>().Count == 0 ? 1 : _db.Get<IBooking>().Count + 1
+            };
+
+            
             return newBooking;
 
 
         }
+       
+
 
         public void ReturnVehicle(string vehicle, int? odometerReturn)
         {
@@ -127,6 +133,11 @@ namespace Car_Business.Classes
         {
 
             return _db.Get<VehicleTypes>().ToList();    
+        }
+
+        public Customer GetCustomer(int? customerId)
+        {
+            return (Customer)_db.GetSingle<IPerson>(a => a.CustomerId == customerId);
         }
 
 

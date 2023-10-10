@@ -17,6 +17,8 @@ namespace Car_Data
 
         public List<T> Get<T>(Expression<Func<T, bool>>? expression = null);
 
+        public object GetSingle<T>(Expression<Func<T, bool>>? expression = null);
+
         void SeedData();
 
 

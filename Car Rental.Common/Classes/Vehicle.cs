@@ -15,9 +15,9 @@ public class Vehicle : IVehicle
     public int? costKM { get; set; }
     
     public int? odometer { get; set; }
-    public string regNo { get; set; }
+    public string? regNo { get; set; }
   
-    public string make { get; set; }
+    public string? make { get; set; }
 
     public bool available { get; set; }
 

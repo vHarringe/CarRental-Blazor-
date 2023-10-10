@@ -10,7 +10,7 @@ namespace Car_Rental.Data.Classes
 {
     public class CollectionData : IData
     {
-        private Dictionary<Type, IEnumerable<object>> _data = new Dictionary<Type, IEnumerable<object>>();
+        private readonly Dictionary<Type, IEnumerable<object>> _data = new();
 
         public CollectionData()
         {
@@ -36,7 +36,7 @@ namespace Car_Rental.Data.Classes
 
             _data[typeof(IBooking)] = new List<IBooking>();
 
-            List<VehicleTypes> vehicleTypesList = new List<VehicleTypes>
+            List<VehicleTypes> vehicleTypesList = new()
             {
                 VehicleTypes.Sedan,
                 VehicleTypes.Combi,
@@ -68,8 +68,6 @@ namespace Car_Rental.Data.Classes
                
         }
 
-
-
         public void Add<T>(T item)
         {
             Type targetType = typeof(T);
@@ -86,8 +84,30 @@ namespace Car_Rental.Data.Classes
            
         }
 
-        
+        public object GetSingle<T>(Expression<Func<T, bool>>? expression = null)
+        {
+            Type targetType = typeof(T);
 
-      
+            if(expression != null)
+            { 
+                if(_data.TryGetValue(targetType, out var targetList))
+                {
+                    var filter = expression.Compile();
+                    var result = targetList.Cast<T>().FirstOrDefault(filter);
+                    
+                    if(result != null)
+                        return result;
+                    else
+                        throw new NotImplementedException();
+
+                }
+            }
+            throw new NotImplementedException();
+
+
+        }
+
+
+
     }
 }

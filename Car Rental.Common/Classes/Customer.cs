@@ -12,7 +12,7 @@ public class Customer : IPerson
 {
     public string LastName { get; set; }
     public string FirstName { get; set; }
-    public int Ssn { get; set; }
+    public int? Ssn { get; set; }
 
     public int CustomerId { get; set; }
 
@@ -22,7 +22,7 @@ public class Customer : IPerson
     {
         LastName = lName;
         FirstName = fName;
-        Ssn = (int)SSN;
+        Ssn = SSN;
         CustomerId = Id;
     }
 

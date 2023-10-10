@@ -402,7 +402,7 @@
             if (vehicleType == VehicleTypes.Sedan || vehicleType == VehicleTypes.Van || vehicleType == VehicleTypes.Combi)
             {
 
-                pb.AddVehicle(pb.CreateCar(costDay, costKM, odometer, regNo, make, true, vehicleType));
+                pb.AddVehicle(BookingProcessor.CreateCar(costDay, costKM, odometer, regNo, make, true, vehicleType));
 
                 costDay = null;
                 costKM = null;
@@ -415,7 +415,7 @@
             }
             else if (vehicleType == VehicleTypes.Motorcycle)
             {
-                pb.AddVehicle(pb.CreateMotorcycle(costDay, costKM, odometer, regNo, make, true, vehicleType));
+                pb.AddVehicle(BookingProcessor.CreateMotorcycle(costDay, costKM, odometer, regNo, make, true, vehicleType));
                 costDay = null;
                 costKM = null;
                 odometer = null;
@@ -445,7 +445,8 @@
 
     private void SubmitBooking(int? customerId, IVehicle car)
     {
-        var bookingCustomer = pb.GetPersons().Single(a => a.CustomerId == customerId);
+        var bookingCustomer = pb.GetCustomer(customerId);
+
         pb.AddBooking(pb.CreateBooking(bookingCustomer, car));
         car.available = false;
 
