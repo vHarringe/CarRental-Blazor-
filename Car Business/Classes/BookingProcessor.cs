@@ -50,16 +50,16 @@ namespace Car_Business.Classes
 
         }
 
-        public Booking CreateBooking(IPerson customer, IVehicle vehicle)
+        public async Task<Booking> CreateBookingAsync(IPerson customer, IVehicle vehicle)
         {
+            await Task.Delay(5000);
             Booking newBooking = new(vehicle, customer)
             {
                 BookingId = _db.Get<IBooking>().Count == 0 ? 1 : _db.Get<IBooking>().Count + 1
             };
-
             
-            return newBooking;
 
+            return newBooking;
 
         }
        

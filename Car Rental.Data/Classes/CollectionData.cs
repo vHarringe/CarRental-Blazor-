@@ -11,12 +11,10 @@ namespace Car_Rental.Data.Classes
     public class CollectionData : IData
     {
         private readonly Dictionary<Type, IEnumerable<object>> _data = new();
-
         public CollectionData()
         {
             SeedData();
         }
-
         public void SeedData()
         {
             _data[typeof(IPerson)] = new List<IPerson>
@@ -49,6 +47,7 @@ namespace Car_Rental.Data.Classes
 
         }
 
+
         public List<T> Get<T>(Expression<Func<T, bool>>? expression = null)
         {
             Type targetType = typeof(T);
@@ -67,7 +66,6 @@ namespace Car_Rental.Data.Classes
             throw new NotImplementedException();
                
         }
-
         public void Add<T>(T item)
         {
             Type targetType = typeof(T);
@@ -83,7 +81,6 @@ namespace Car_Rental.Data.Classes
             }
            
         }
-
         public object GetSingle<T>(Expression<Func<T, bool>>? expression = null)
         {
             Type targetType = typeof(T);

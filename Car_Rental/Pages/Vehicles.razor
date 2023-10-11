@@ -208,7 +208,7 @@
                                 
                             </select>
                         </td>
-                        <td><button type="button" class="btn btn-primary btn-sm" @onclick="() => SubmitBooking(a.SelectedCustomerId, a)">Order</button></td>
+                        <td><button type="button" class="btn btn-primary btn-sm" @onclick="() => SubmitBookingAsync(a.SelectedCustomerId, a)">Order</button></td>
                     }
                     else
                     {
@@ -443,14 +443,23 @@
 
     }
 
-    private void SubmitBooking(int? customerId, IVehicle car)
+    private async void SubmitBookingAsync(int? customerId, IVehicle car)
     {
+        //metoden funkar nu men UI måste laddas om för att det ska läggas till i listan utan att ladda om manuellt.
+
+        // Disabla alla knappar och lägga in en "loading"-cirkel
+
         var bookingCustomer = pb.GetCustomer(customerId);
 
-        pb.AddBooking(pb.CreateBooking(bookingCustomer, car));
+        var booking = await pb.CreateBookingAsync(bookingCustomer, car);
+
+        pb.AddBooking(booking);
+
+        // uppdatera UI på nått sätt
+
         car.available = false;
 
-
+        // enabla alla knappar och ta bort "loading"-cirkel
     }
 
     private void ReturnVehicle(string vehicle, int? odometerReturn)

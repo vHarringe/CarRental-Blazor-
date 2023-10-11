@@ -10,8 +10,6 @@ namespace Car_Rental.Common.Classes;
 public class Motorcycle : Vehicle
 {
 
-    //public string Make {  get; set; }
-
     public Motorcycle(int? costDay, int? costKM, int? odometer, string regNo, string make, bool available, VehicleTypes? vehicleType)
     {
         this.costDay = costDay;
