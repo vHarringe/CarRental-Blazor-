@@ -52,7 +52,7 @@ namespace Car_Business.Classes
 
         public async Task<Booking> CreateBookingAsync(IPerson customer, IVehicle vehicle)
         {
-            await Task.Delay(5000);
+            await Task.Delay(2000);
             Booking newBooking = new(vehicle, customer)
             {
                 BookingId = _db.Get<IBooking>().Count == 0 ? 1 : _db.Get<IBooking>().Count + 1

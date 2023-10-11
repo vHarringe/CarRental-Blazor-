@@ -149,9 +149,21 @@
 
 <hr />
 
-<!--Vehicle Table-->
-<div>
+<button type="button" @onclick="Byt">s</button>
 
+<!--Vehicle Table-->
+<div class="@((isDisabled) ? "car-disable" : "")">
+
+    @if (isDisabled)
+    {
+        <div class="spinner-overlay">
+            <div class="d-flex justify-content-center">
+                <div class="spinner-border spinner-size text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+        </div>
+    }
     <table class="table table-striped">
         <thead>
             <tr >
@@ -161,7 +173,9 @@
                 <th>cost/day</th>
                 <th>cost/KM</th>
                 <th>Action</th>
-
+                
+                   
+                
             </tr>
         </thead>
         <tbody>
@@ -288,7 +302,12 @@
 
 @code 
 {
+    public void Byt()
+    {
+        isDisabled = !isDisabled;
+    }
 
+    bool isDisabled = true;
     bool alertCustomer = false;
 
     public int currentCount = 0;
@@ -445,9 +464,8 @@
 
     private async void SubmitBookingAsync(int? customerId, IVehicle car)
     {
-        //metoden funkar nu men UI måste laddas om för att det ska läggas till i listan utan att ladda om manuellt.
 
-        // Disabla alla knappar och lägga in en "loading"-cirkel
+        isDisabled = true;
 
         var bookingCustomer = pb.GetCustomer(customerId);
 
@@ -455,11 +473,13 @@
 
         pb.AddBooking(booking);
 
-        // uppdatera UI på nått sätt
-
         car.available = false;
 
-        // enabla alla knappar och ta bort "loading"-cirkel
+        isDisabled = false;
+
+        StateHasChanged();
+
+        
     }
 
     private void ReturnVehicle(string vehicle, int? odometerReturn)
