@@ -7,8 +7,7 @@
 <!-- Registrera ny -->
 @if (alertCustomer)
 {
-    <div class="alert alert-warning" role="alert">
-        A simple warning alert with <a href="#" class="alert-link">an example link</a>. Give it a click if you like.
+    <div class="alert alert-warning" role="alert">Gick inte att registrera kund!
         <button type="button" class="btn-close float-end" @onclick="CloseAlertCustomer"></button>
     </div>
 
@@ -57,7 +56,7 @@
 @if(alert) 
 {
     <div class="alert alert-warning" role="alert">
-        A simple warning alert—check it out!
+        Gick inte att registrera fordon!
         <button type="button" class="btn-close float-end" aria-label="Close" @onclick="CloseAlert"></button>
     </div>
     
@@ -227,10 +226,10 @@
                     else
                     {
                         <td>
-                            
-                            <input type="text" class="form-control" placeholder="Odometer on return" @bind="odometerReturn"/>
+
+                            <input type="text" class="form-control @(a.RedFlagReturn ? "red-outline" : "")" placeholder="Odometer on return" @bind="a.OdometerReturned" @onclick="() => ClearError(a)" />
                         </td>
-                        <td><button type="button" class="btn btn-success btn-sm mt-1" @onclick="(() => ReturnVehicle(a.regNo, odometerReturn))">Return</button></td>
+                        <td><button type="button" class="btn btn-success btn-sm mt-1" @onclick="(() => ReturnVehicle(a.regNo, a.OdometerReturned))">Return</button></td>
                     }
 
                 </tr>
@@ -355,7 +354,6 @@
     int minOdometer;
     int odometerFilter;
 
-    int? odometerReturn; 
 
     bool alert = false;
 
@@ -456,7 +454,6 @@
             vehicleType = null;
             alert = true;
 
-
         }
 
 
@@ -479,19 +476,34 @@
 
         StateHasChanged();
 
-        
+
     }
+
+    private bool isError = false;
 
     private void ReturnVehicle(string vehicle, int? odometerReturn)
     {
-        if(odometerReturn is not null)
+        Vehicle car1 = pb.GetVehicle(vehicle);
+        if(odometerReturn > car1.odometer && odometerReturn is not null)
+        {
             pb.ReturnVehicle(vehicle, odometerReturn);
+        }
+        else
+        {
+            car1.RedFlagReturn = true;
+        }
 
         var maxOdo = pb.GetVehicles().OrderByDescending(o => o.odometer).FirstOrDefault();
         maxOdometer = maxOdo != null ? Convert.ToInt32(maxOdo.odometer) : 100;
 
         odometerFilter = maxOdometer;
 
+
+
+    }
+    private void ClearError(IVehicle a)
+    {
+        a.RedFlagReturn = false;
     }
 
 }

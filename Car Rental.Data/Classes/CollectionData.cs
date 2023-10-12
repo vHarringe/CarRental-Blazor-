@@ -73,7 +73,6 @@ namespace Car_Rental.Data.Classes
             if (_data.TryGetValue(targetType, out var targetList))
             {
                 ((List<T>)_data[typeof(T)]).Add(item);
-
             }
             else
             {

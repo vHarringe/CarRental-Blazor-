@@ -140,6 +140,13 @@ namespace Car_Business.Classes
             return (Customer)_db.GetSingle<IPerson>(a => a.CustomerId == customerId);
         }
 
+        public Vehicle GetVehicle(string reg)
+        {
+            return (Vehicle)_db.GetSingle<IVehicle>(a => a.regNo == reg);
+        }
+
+
+
 
     }
 }

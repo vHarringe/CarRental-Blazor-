@@ -12,7 +12,7 @@ public abstract class Vehicle : IVehicle
     public int? odometer { get; set; }
     public string? regNo { get; set; }
   
-    public string? make { get; set; }
+    public string make { get; set; }
 
     public bool available { get; set; }
 
@@ -20,4 +20,8 @@ public abstract class Vehicle : IVehicle
     
 
     public int? SelectedCustomerId {  get; set; }
+
+    public int? OdometerReturned { get; set; }
+
+    public bool RedFlagReturn { get; set; }
 }

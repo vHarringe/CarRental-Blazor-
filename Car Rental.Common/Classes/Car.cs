@@ -23,6 +23,8 @@ public class Car : Vehicle
         this.make = make;
         this.VehicleType = vehicleType;
 
+        RedFlagReturn = false;
+
     }
     
 
