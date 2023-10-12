@@ -67,7 +67,7 @@ namespace Car_Business.Classes
 
         public void ReturnVehicle(string vehicle, int? odometerReturn)
         {
-            var cancelBooking = _db.Get<IBooking>().Single(a => a.Vehicle.regNo == vehicle);
+            var cancelBooking = _db.Get<IBooking>().Last(a => a.Vehicle.regNo == vehicle);
 
             cancelBooking.TotalCost = cancelBooking.Vehicle.costKM * (odometerReturn - cancelBooking.Vehicle.odometer) + cancelBooking.Vehicle.costDay;
             cancelBooking.Status = true;

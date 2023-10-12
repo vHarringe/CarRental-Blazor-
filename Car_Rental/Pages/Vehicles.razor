@@ -148,8 +148,6 @@
 
 <hr />
 
-<button type="button" @onclick="Byt">s</button>
-
 <!--Vehicle Table-->
 <div class="@((isDisabled) ? "car-disable" : "")">
 
@@ -301,13 +299,10 @@
 
 @code 
 {
-    public void Byt()
-    {
-        isDisabled = !isDisabled;
-    }
-
-    bool isDisabled = true;
+    
+    bool isDisabled = false;
     bool alertCustomer = false;
+    bool alert = false;
 
     public int currentCount = 0;
     private string? lName = null;
@@ -318,7 +313,9 @@
 
     private void AddCustomer()
     {
-        if (lName is not null && fName is not null && Ssn is not null)
+        if (lName is not null && 
+            fName is not null && 
+            Ssn is not null)
         {
 
             var newCustomer = pb.CreateCustomer(lName, fName, Ssn);
@@ -348,14 +345,12 @@
     int maxCost;
     int minCost;
     int costDayFilter;
-
-
     int maxOdometer;
     int minOdometer;
     int odometerFilter;
 
 
-    bool alert = false;
+    
 
     public int? costDay;
     public int? costKM;
@@ -412,7 +407,13 @@
     private void SubmitVehicle()
     {
         alert = false;
-        if (costDay != null && costKM != null && odometer != null && regNo != null && make != null && vehicleType != null)
+        if (costDay != null &&
+            costKM != null &&
+            odometer != null &&
+            regNo != null &&
+            make != null &&
+            vehicleType != null)
+
         {
 
 
@@ -493,6 +494,7 @@
             car1.RedFlagReturn = true;
         }
 
+        car1.OdometerReturned = null;
         var maxOdo = pb.GetVehicles().OrderByDescending(o => o.odometer).FirstOrDefault();
         maxOdometer = maxOdo != null ? Convert.ToInt32(maxOdo.odometer) : 100;
 
