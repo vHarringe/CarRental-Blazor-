@@ -1,10 +1,9 @@
 ﻿namespace Car_Rental.Common.Exceptions;
 
-public class Exceptions : Exception
+public class DataNotImplementedException : Exception
 {
-    public Exceptions(string message) : base(message) 
-    { 
-        
-    }    
+    public DataNotImplementedException() : base("Data access for this type is not implemented.")
+    {
 
+    }
 }

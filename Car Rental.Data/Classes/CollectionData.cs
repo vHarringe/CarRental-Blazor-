@@ -1,6 +1,7 @@
 ﻿using Car_Data;
 using Car_Rental.Common.Classes;
 using Car_Rental.Common.Enums;
+using Car_Rental.Common.Exceptions;
 using Car_Rental.Common.Interfaces;
 using System;
 using System.Linq;
@@ -63,8 +64,7 @@ namespace Car_Rental.Data.Classes
                 return targetList.Cast<T>().ToList();
             }
 
-            throw new NotImplementedException();
-               
+            throw new DataNotImplementedException();
         }
         public void Add<T>(T item)
         {
@@ -76,7 +76,7 @@ namespace Car_Rental.Data.Classes
             }
             else
             {
-                throw new NotImplementedException();
+                throw new DataNotImplementedException();
             }
            
         }
@@ -98,7 +98,7 @@ namespace Car_Rental.Data.Classes
 
                 }
             }
-            throw new NotImplementedException();
+            throw new DataNotImplementedException();
 
 
         }

@@ -299,17 +299,38 @@
 
 @code 
 {
-    
+ 
+    #region LOKALA VARIABLER
+
+    // bools
     bool isDisabled = false;
     bool alertCustomer = false;
     bool alert = false;
+    private bool isError = false;
 
-    public int currentCount = 0;
+    // add Customer
     private string? lName = null;
     private string? fName = null;
     private int? CustomerId = null;
     private int? Ssn = null;
 
+    // lamda-filter (getVehicles)
+    int maxCost;
+    int minCost;
+    int costDayFilter;
+    int maxOdometer;
+    int minOdometer;
+    int odometerFilter;
+
+    // add vehicle
+    public int? costDay;
+    public int? costKM;
+    public int? odometer;
+    public string? regNo;
+    public string? make;
+    VehicleTypes? vehicleType;
+
+    #endregion 
 
     private void AddCustomer()
     {
@@ -334,33 +355,20 @@
 
 
     }
+
+
+    // Close alert metoder
     private void CloseAlertCustomer()
     {
         alertCustomer = false;
     }
+    void CloseAlert()
+    {
+        alert = false;
+    }
 
 
-
-
-    int maxCost;
-    int minCost;
-    int costDayFilter;
-    int maxOdometer;
-    int minOdometer;
-    int odometerFilter;
-
-
-    
-
-    public int? costDay;
-    public int? costKM;
-    public int? odometer;
-    public string? regNo;
-    public string? make;
-    VehicleTypes? vehicleType;
-
-
-
+    // Få max/min-värden för range filter 
     protected override void OnInitialized()
     {
         var max = pb.GetVehicles().OrderByDescending(c => c.costDay).FirstOrDefault();
@@ -379,13 +387,7 @@
 
     }
 
-
-
-    void CloseAlert()
-    {
-        alert = false;
-    }
-
+    // metod för price range-input
     private void UpdatePrice(ChangeEventArgs? price)
     {
         if (price != null && price.Value != null)
@@ -394,6 +396,8 @@
         }
 
     }
+
+    //metod för odometer range-input
     private void UpdateOdometer(ChangeEventArgs? odometer)
     {
         if (odometer != null && odometer.Value != null)
@@ -480,7 +484,7 @@
 
     }
 
-    private bool isError = false;
+    
 
     private void ReturnVehicle(string vehicle, int? odometerReturn)
     {
