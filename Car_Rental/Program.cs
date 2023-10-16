@@ -13,7 +13,7 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.
 
 builder.Services.AddScoped<BookingProcessor>();
 builder.Services.AddSingleton<IData, CollectionData>();
-builder.Services.AddSingleton<ISingletonStartup, AppStart>();
+
 
 
 
