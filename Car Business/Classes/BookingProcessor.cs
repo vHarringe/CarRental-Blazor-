@@ -5,6 +5,7 @@ using Car_Rental.Common.Classes;
 using Car_Rental.Common.Enums;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using Car_Rental.Common.Extensions;
 
 namespace Car_Business.Classes
 {
@@ -68,17 +69,19 @@ namespace Car_Business.Classes
         public void ReturnVehicle(string vehicle, int? odometerReturn)
         {
             var cancelBooking = _db.Get<IBooking>().Last(a => a.Vehicle.regNo == vehicle);
+           
 
-            cancelBooking.TotalCost = cancelBooking.Vehicle.costKM * (odometerReturn - cancelBooking.Vehicle.odometer) + cancelBooking.Vehicle.costDay;
+            cancelBooking.KMReturned = odometerReturn;
+            cancelBooking.BookingReturned = DateTime.Now;
+
+            cancelBooking.CalcPrice(); // extensionmetod sätter värde på totalCost
+
             cancelBooking.Status = true;
             cancelBooking.Vehicle.available = true;
-            cancelBooking.BookingReturned = DateTime.Now;
-            cancelBooking.KMReturned = odometerReturn;
 
             var car = _db.Get<IVehicle>().Single(a => a.regNo == vehicle);
             car.odometer = odometerReturn;
             
-
         }
       
 

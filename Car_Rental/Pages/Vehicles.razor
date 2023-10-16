@@ -210,7 +210,7 @@
                     @if (a.available)
                     {
                         <td>
-                            <select class="form-select" aria-label="Default select example" @bind="a.SelectedCustomerId">
+                            <select class="form-select @(a.RedFlagReturn ? "red-outline" : "")" aria-label="Default select example" @bind="a.SelectedCustomerId" @onclick="() => ClearError(a)">
                                 <option value="" disabled selected>Select a customer</option>
                                 @foreach (var b in pb.GetPersons())
                                 {
@@ -299,7 +299,7 @@
 
 @code 
 {
- 
+
     #region LOKALA VARIABLER
 
     // bools
@@ -466,7 +466,11 @@
 
     private async void SubmitBookingAsync(int? customerId, IVehicle car)
     {
-
+        if(customerId is null)
+        {
+            car.RedFlagReturn = true;
+            return;
+        }
         isDisabled = true;
 
         var bookingCustomer = pb.GetCustomer(customerId);
