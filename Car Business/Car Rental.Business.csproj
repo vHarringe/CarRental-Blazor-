@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Components" Version="7.0.10" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Car Rental.Common\Car Rental.Common.csproj" />
     <ProjectReference Include="..\Car Rental.Data\Car Rental.Data.csproj" />
   </ItemGroup>

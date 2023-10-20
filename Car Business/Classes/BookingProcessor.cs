@@ -6,6 +6,10 @@ using Car_Rental.Common.Enums;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using Car_Rental.Common.Extensions;
+using System.Runtime.Intrinsics.X86;
+using System.Xml.Linq;
+using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.Components;
 
 namespace Car_Business.Classes
 {
@@ -15,23 +19,134 @@ namespace Car_Business.Classes
 
 
         public readonly IData _db;
+        public readonly Input _input;
         
 
-        public BookingProcessor(IData db)
+        public BookingProcessor(IData db, Input i)
         {
             _db = db;
-            
+            _input = i;
+        }
+        
+
+        public void CreateCustomer()
+        {
+            if (_input.lName is not null &&
+                _input.fName is not null &&
+                _input.Ssn is not null)
+            {
+                int newId = (_db.Get<IPerson>().Any() ? _db.Get<IPerson>().Max(p => p.CustomerId) + 1 : 1);
+                Customer newCustomer = new(_input.lName, _input.fName, _input.Ssn, newId);
+
+                AddCustomer(newCustomer);
+                _input.lName = "";
+                _input.fName = "";
+                _input.Ssn = null;
+                _input.alertCustomer = false;
+               
+            }
+            else
+            {
+                _input.alertCustomer = true;
+            }
+
+
         }
 
-        public Customer CreateCustomer(string lName, string fName, int? SSN)
+        public void CreateVehicle()
         {
-            int newId = (_db.Get<IPerson>().Any() ? _db.Get<IPerson>().Max(p => p.CustomerId) + 1 : 1);
-
-
-            Customer newCustomer = new(lName, fName, SSN, newId);
             
+            _input.alert = false;
+            if (_input.costDay != null &&
+                _input.costKM != null &&
+                _input.odometer != null &&
+                _input.regNo != null &&
+                _input.make != null &&
+                _input.vehicleType != null)
+            {
 
-            return newCustomer;
+
+                    if (_input.vehicleType == VehicleTypes.Sedan || _input.vehicleType == VehicleTypes.Van || _input.vehicleType == VehicleTypes.Combi)
+                    {
+
+                        AddVehicle(CreateCar(_input.costDay, _input.costKM, _input.odometer, _input.regNo, _input.make, true, _input.vehicleType));
+
+                        _input.costDay = null;
+                        _input.costKM = null;
+                        _input.odometer = null;
+                        _input.regNo = null;
+                        _input.make = null;
+                        _input.vehicleType = null;
+
+
+                    }
+                    else if (_input.vehicleType == VehicleTypes.Motorcycle)
+                    {
+                        AddVehicle(CreateMotorcycle(_input.costDay, _input.costKM, _input.odometer, _input.regNo, _input.make, true, _input.vehicleType));
+                        _input.costDay = null;
+                        _input.costKM = null;
+                        _input.odometer = null;
+                        _input.regNo = null;
+                        _input.make = null;
+                        _input.vehicleType = null;
+
+                    }
+
+
+            }
+            else
+            {
+                _input.costDay = null;
+                _input.costKM = null;
+                _input.odometer = null;
+                _input.regNo = null;
+                _input.make = null;
+                _input.vehicleType = null;
+                _input.alert = true;
+
+            }
+
+
+        }
+
+        
+        public void GetFilterValues()
+        {
+            var max = GetVehicles().OrderByDescending(c => c.costDay).FirstOrDefault();
+            _input.maxCost = max != null ? Convert.ToInt32(max.costDay) : 100;
+            var min = GetVehicles().OrderBy(c => c.costDay).FirstOrDefault();
+            _input.minCost = min != null ? Convert.ToInt32(min.costDay) : 0;
+
+            _input.costDayFilter = _input.maxCost;
+
+            var maxOdo = GetVehicles().OrderByDescending(o => o.odometer).FirstOrDefault();
+            _input.maxOdometer = maxOdo != null ? Convert.ToInt32(maxOdo.odometer) : 100;
+            var minOdo = GetVehicles().OrderBy(o => o.odometer).FirstOrDefault();
+            _input.minOdometer = minOdo != null ? Convert.ToInt32(minOdo.odometer) : 100;
+
+            _input.odometerFilter = _input.maxOdometer;
+
+        }
+
+        public async Task SubmitBookingAsync(int? customerId, IVehicle car)
+        {
+            if (customerId is null)
+            {
+                car.RedFlagReturn = true;
+                return;
+            }
+            _input.isDisabled = true;
+
+            var bookingCustomer = GetCustomer(customerId);
+
+            var booking = await CreateBookingAsync(bookingCustomer, car);
+
+            AddBooking(booking);
+
+            car.available = false;
+
+            _input.isDisabled = false;
+
 
         }
 
@@ -68,22 +183,37 @@ namespace Car_Business.Classes
 
         public void ReturnVehicle(string vehicle, int? odometerReturn)
         {
-            var cancelBooking = _db.Get<IBooking>().Last(a => a.Vehicle.regNo == vehicle);
-           
+            Vehicle car1 = GetVehicle(vehicle);
+            if (odometerReturn > car1.odometer && odometerReturn is not null)
+            {
+                var cancelBooking = _db.Get<IBooking>().Last(a => a.Vehicle.regNo == vehicle);
 
-            cancelBooking.KMReturned = odometerReturn;
-            cancelBooking.BookingReturned = DateTime.Now;
 
-            cancelBooking.CalcPrice(); // extensionmetod sätter värde på totalCost
+                cancelBooking.KMReturned = odometerReturn;
+                cancelBooking.BookingReturned = DateTime.Now;
 
-            cancelBooking.Status = true;
-            cancelBooking.Vehicle.available = true;
+                cancelBooking.CalcPrice(); // extensionmetod sätter värde på totalCost
 
-            var car = _db.Get<IVehicle>().Single(a => a.regNo == vehicle);
-            car.odometer = odometerReturn;
-            
+                cancelBooking.Status = true;
+                cancelBooking.Vehicle.available = true;
+
+                var car = _db.Get<IVehicle>().Single(a => a.regNo == vehicle);
+                car.SelectedCustomerId = null;
+                car.odometer = odometerReturn;
+            }
+            else
+            {
+                car1.RedFlagReturn = true;
+            }
+
+            car1.OdometerReturned = null;
+            var maxOdo = GetVehicles().OrderByDescending(o => o.odometer).FirstOrDefault();
+            _input.maxOdometer = maxOdo != null ? Convert.ToInt32(maxOdo.odometer) : 100;
+
+            _input.odometerFilter = _input.maxOdometer;
+
         }
-      
+
 
         public void AddCustomer<T>(T item) where T : IPerson
         {

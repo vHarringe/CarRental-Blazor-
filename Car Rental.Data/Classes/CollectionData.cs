@@ -33,7 +33,10 @@ namespace Car_Rental.Data.Classes
                 new Motorcycle(450, 20, 1500, "JUS666", "Yamaha", true, VehicleTypes.Motorcycle)
             };
 
-            _data[typeof(IBooking)] = new List<IBooking>();
+            _data[typeof(IBooking)] = new List<IBooking>() 
+            { 
+                
+            };
 
             List<VehicleTypes> vehicleTypesList = new()
             {

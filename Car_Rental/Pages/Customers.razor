@@ -54,7 +54,7 @@
             </div>
             <div class="modal-footer">
                 
-                <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" @onclick="AddCustomer">registrera ny</button>
+                <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" @onclick="pb.CreateCustomer">registrera ny</button>
             </div>
         </div>
     </div>
@@ -106,27 +106,7 @@
     private int? Ssn = null;
 
 
-    private void AddCustomer()
-    {
-        if(lName is not null && fName is not null && Ssn is not null)
-        {
-
-            var newCustomer = pb.CreateCustomer(lName, fName, Ssn);
-
-            pb.AddCustomer(newCustomer);
-            lName = "";
-            fName = "";
-            Ssn = null;
-            alert = false;
-
-        }
-        else
-        {
-            alert = true;
-        }
-
-
-    }
+    
     private void CloseAlert()
     {
         alert = false;

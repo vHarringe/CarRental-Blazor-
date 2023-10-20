@@ -3,12 +3,13 @@
 
 
 @inject BookingProcessor pb
+@inject Input input
 
 <!-- Registrera ny -->
-@if (alertCustomer)
+@if (input.alertCustomer)
 {
     <div class="alert alert-warning" role="alert">Gick inte att registrera kund!
-        <button type="button" class="btn-close float-end" @onclick="CloseAlertCustomer"></button>
+        <button type="button" class="btn-close float-end" @onclick="input.CloseAlertCustomer"></button>
     </div>
 
 }
@@ -30,22 +31,22 @@
                 <form>
                     <div class="mb-3">
                         <label for="förnamnInput" class="form-label">Förnamn</label>
-                        <input type="text" class="form-control" id="förnamnInput" @bind="fName">
+                        <input type="text" class="form-control" id="förnamnInput" @bind="input.fName">
                     </div>
                     <div class="mb-3">
                         <label for="efternamnInput" class="form-label">Efternamn</label>
-                        <input type="text" class="form-control" id="efternamnInput" @bind="lName">
+                        <input type="text" class="form-control" id="efternamnInput" @bind="input.lName">
                     </div>
                     <div class="mb-3">
                         <label for="SSNInput" class="form-label">SSN</label>
-                        <input type="text" class="form-control" id="SSNInput" @bind="Ssn">
+                        <input type="text" class="form-control" id="SSNInput" @bind="input.Ssn">
                     </div>
 
                 </form>
             </div>
             <div class="modal-footer">
 
-                <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" @onclick="AddCustomer">registrera ny</button>
+                <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" @onclick="pb.CreateCustomer">registrera ny</button>
             </div>
         </div>
     </div>
@@ -53,11 +54,11 @@
 
 
 
-@if(alert) 
+@if(input.alert) 
 {
     <div class="alert alert-warning" role="alert">
         Gick inte att registrera fordon!
-        <button type="button" class="btn-close float-end" aria-label="Close" @onclick="CloseAlert"></button>
+        <button type="button" class="btn-close float-end" aria-label="Close" @onclick="input.CloseAlert"></button>
     </div>
     
 }
@@ -85,27 +86,27 @@
                 <form>
                     <div class="mb-3">
                         <label for="fornamnInput" class="form-label">Make</label>
-                        <input type="text" class="form-control" id="fornamnInput" @bind="make">
+                        <input type="text" class="form-control" id="fornamnInput" @bind="input.make">
                     </div>
                     <div class="mb-3">
                         <label for="costDay" class="form-label">costDay</label>
-                        <input type="text" class="form-control" id="costDay" @bind="costDay">
+                        <input type="text" class="form-control" id="costDay" @bind="input.costDay">
                     </div>
                     <div class="mb-3">
                         <label for="OdometerInput" class="form-label">Odometer</label>
-                        <input type="text" class="form-control" id="OdometerInput" @bind="odometer">
+                        <input type="text" class="form-control" id="OdometerInput" @bind="input.odometer">
                     </div>
                     <div class="mb-3">
                         <label for="CostKMInput" class="form-label">costKM</label>
-                        <input type="text" class="form-control" id="CostKMInput" @bind="costKM">
+                        <input type="text" class="form-control" id="CostKMInput" @bind="input.costKM">
                     </div>
                     <div class="mb-3">
                         <label for="regInput" class="form-label">Registration number</label>
-                        <input type="text" class="form-control" id="regInput" @bind="regNo">
+                        <input type="text" class="form-control" id="regInput" @bind="input.regNo">
                     </div>
                     <div>
                         <label for="VehicleSelect" class="form-label">Vehicle type</label>
-                        <select class="form-select" id="VehicleSelect" aria-label="Default select example" @bind="vehicleType">
+                        <select class="form-select" id="VehicleSelect" aria-label="Default select example" @bind="input.vehicleType">
                             <option>Select vehicle type</option>
                             @foreach(var a in pb.GetVehicleTypes())
                             {
@@ -119,7 +120,7 @@
             </div>
             <div class="modal-footer">
 
-                <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" @onclick="SubmitVehicle">registrera ny</button>
+                <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" @onclick="pb.CreateVehicle">registrera ny</button>
             </div>
         </div>
     </div>
@@ -129,15 +130,15 @@
 <div class="row">
     <div class="form-group col-2 me-5">
         <label for="priceRange">Max Cost/day</label>
-        <input type="range" class="form-range" id="priceRange" min="@minCost" max="@maxCost" step="100" @bind="costDayFilter" @oninput="UpdatePrice" />
+        <input type="range" class="form-range" id="priceRange" min="@input.minCost" max="@input.maxCost" step="100" @bind="input.costDayFilter" @oninput="input.UpdatePrice" />
 
-        <span class="badge bg-primary">@costDayFilter</span>
+        <span class="badge bg-primary">@input.costDayFilter</span>
     </div>
     <div class="form-group col-2">
         <label for="priceRange">Max Odometer</label>
-        <input type="range" class="form-range" id="priceRange" min="@minOdometer" max="@maxOdometer" step="100" @bind="odometerFilter" @oninput="UpdateOdometer" />
+        <input type="range" class="form-range" id="priceRange" min="@input.minOdometer" max="@input.maxOdometer" step="100" @bind="input.odometerFilter" @oninput="input.UpdateOdometer" />
 
-        <span class="badge bg-primary">@odometerFilter</span>
+        <span class="badge bg-primary">@input.odometerFilter</span>
 
 
     </div>
@@ -149,9 +150,9 @@
 <hr />
 
 <!--Vehicle Table-->
-<div class="@((isDisabled) ? "car-disable" : "")">
+<div class="@((input.isDisabled) ? "car-disable" : "")">
 
-    @if (isDisabled)
+    @if (input.isDisabled)
     {
         <div class="spinner-overlay">
             <div class="d-flex justify-content-center">
@@ -177,7 +178,7 @@
         </thead>
         <tbody>
 
-            @foreach (var a in pb.GetFilteredVehicles(costDayFilter, odometerFilter)) 
+            @foreach (var a in pb.GetFilteredVehicles(input.costDayFilter, input.odometerFilter))
             /* en metod på denna 
             razorsida som man använder istället. olika lamda för olika input.
             kan vara t.ex 1 för "CostDay". med parametrar som bestämmer vad get metoden ska filtrera.
@@ -210,7 +211,7 @@
                     @if (a.available)
                     {
                         <td>
-                            <select class="form-select @(a.RedFlagReturn ? "red-outline" : "")" aria-label="Default select example" @bind="a.SelectedCustomerId" @onclick="() => ClearError(a)">
+                            <select class="form-select @(a.RedFlagReturn ? "red-outline" : "")" aria-label="Default select example" @bind="a.SelectedCustomerId" @onclick="() => input.ClearError(a)">
                                 <option value="" disabled selected>Select a customer</option>
                                 @foreach (var b in pb.GetPersons())
                                 {
@@ -219,15 +220,15 @@
                                 
                             </select>
                         </td>
-                        <td><button type="button" class="btn btn-primary btn-sm" @onclick="() => SubmitBookingAsync(a.SelectedCustomerId, a)">Order</button></td>
+                        <td><button type="button" class="btn btn-primary btn-sm" @onclick="() => pb.SubmitBookingAsync(a.SelectedCustomerId, a)">Order</button></td>
                     }
                     else
                     {
                         <td>
 
-                            <input type="text" class="form-control @(a.RedFlagReturn ? "red-outline" : "")" placeholder="Odometer on return" @bind="a.OdometerReturned" @onclick="() => ClearError(a)" />
+                            <input type="text" class="form-control @(a.RedFlagReturn ? "red-outline" : "")" placeholder="Odometer on return" @bind="a.OdometerReturned" @onclick="() => input.ClearError(a)" />
                         </td>
-                        <td><button type="button" class="btn btn-success btn-sm mt-1" @onclick="(() => ReturnVehicle(a.regNo, a.OdometerReturned))">Return</button></td>
+                        <td><button type="button" class="btn btn-success btn-sm mt-1" @onclick="(() => pb.ReturnVehicle(a.regNo, a.OdometerReturned))">Return</button></td>
                     }
 
                 </tr>
@@ -299,221 +300,8 @@
 
 @code 
 {
-
-    #region LOKALA VARIABLER
-
-    // bools
-    bool isDisabled = false;
-    bool alertCustomer = false;
-    bool alert = false;
-    private bool isError = false;
-
-    // add Customer
-    private string? lName = null;
-    private string? fName = null;
-    private int? CustomerId = null;
-    private int? Ssn = null;
-
-    // lamda-filter (getVehicles)
-    int maxCost;
-    int minCost;
-    int costDayFilter;
-    int maxOdometer;
-    int minOdometer;
-    int odometerFilter;
-
-    // add vehicle
-    public int? costDay;
-    public int? costKM;
-    public int? odometer;
-    public string? regNo;
-    public string? make;
-    VehicleTypes? vehicleType;
-
-    #endregion 
-
-    private void AddCustomer()
-    {
-        if (lName is not null && 
-            fName is not null && 
-            Ssn is not null)
-        {
-
-            var newCustomer = pb.CreateCustomer(lName, fName, Ssn);
-
-            pb.AddCustomer(newCustomer);
-            lName = "";
-            fName = "";
-            Ssn = null;
-            alertCustomer = false;
-
-        }
-        else
-        {
-            alertCustomer = true;
-        }
-
-
-    }
-
-
-    // Close alert metoder
-    private void CloseAlertCustomer()
-    {
-        alertCustomer = false;
-    }
-    void CloseAlert()
-    {
-        alert = false;
-    }
-
-
-    // Få max/min-värden för range filter 
     protected override void OnInitialized()
     {
-        var max = pb.GetVehicles().OrderByDescending(c => c.costDay).FirstOrDefault();
-        maxCost = max != null? Convert.ToInt32(max.costDay): 100;
-        var min = pb.GetVehicles().OrderBy(c => c.costDay).FirstOrDefault();
-        minCost = min != null ? Convert.ToInt32(min.costDay) : 0;
-
-        costDayFilter = maxCost;
-
-        var maxOdo = pb.GetVehicles().OrderByDescending(o => o.odometer).FirstOrDefault();
-        maxOdometer = maxOdo != null ? Convert.ToInt32(maxOdo.odometer) : 100;
-        var minOdo = pb.GetVehicles().OrderBy(o => o.odometer).FirstOrDefault();
-        minOdometer = minOdo != null ? Convert.ToInt32(minOdo.odometer) : 100;
-
-        odometerFilter = maxOdometer;
-
+        pb.GetFilterValues();
     }
-
-    // metod för price range-input
-    private void UpdatePrice(ChangeEventArgs? price)
-    {
-        if (price != null && price.Value != null)
-        {
-            int.TryParse(price.Value.ToString(), out costDayFilter);
-        }
-
-    }
-
-    //metod för odometer range-input
-    private void UpdateOdometer(ChangeEventArgs? odometer)
-    {
-        if (odometer != null && odometer.Value != null)
-        {
-            int.TryParse(odometer.Value.ToString(), out odometerFilter);
-        }
-
-    }
-
-
-    private void SubmitVehicle()
-    {
-        alert = false;
-        if (costDay != null &&
-            costKM != null &&
-            odometer != null &&
-            regNo != null &&
-            make != null &&
-            vehicleType != null)
-
-        {
-
-
-            if (vehicleType == VehicleTypes.Sedan || vehicleType == VehicleTypes.Van || vehicleType == VehicleTypes.Combi)
-            {
-
-                pb.AddVehicle(BookingProcessor.CreateCar(costDay, costKM, odometer, regNo, make, true, vehicleType));
-
-                costDay = null;
-                costKM = null;
-                odometer = null;
-                regNo = null;
-                make = null;
-                vehicleType = null;
-
-
-            }
-            else if (vehicleType == VehicleTypes.Motorcycle)
-            {
-                pb.AddVehicle(BookingProcessor.CreateMotorcycle(costDay, costKM, odometer, regNo, make, true, vehicleType));
-                costDay = null;
-                costKM = null;
-                odometer = null;
-                regNo = null;
-                make = null;
-                vehicleType = null;
-
-            }
-
-
-        }
-        else
-        {
-            costDay = null;
-            costKM = null;
-            odometer = null;
-            regNo = null;
-            make = null;
-            vehicleType = null;
-            alert = true;
-
-        }
-
-
-    }
-
-    private async void SubmitBookingAsync(int? customerId, IVehicle car)
-    {
-        if(customerId is null)
-        {
-            car.RedFlagReturn = true;
-            return;
-        }
-        isDisabled = true;
-
-        var bookingCustomer = pb.GetCustomer(customerId);
-
-        var booking = await pb.CreateBookingAsync(bookingCustomer, car);
-
-        pb.AddBooking(booking);
-
-        car.available = false;
-
-        isDisabled = false;
-
-        StateHasChanged();
-
-
-    }
-
-    
-
-    private void ReturnVehicle(string vehicle, int? odometerReturn)
-    {
-        Vehicle car1 = pb.GetVehicle(vehicle);
-        if(odometerReturn > car1.odometer && odometerReturn is not null)
-        {
-            pb.ReturnVehicle(vehicle, odometerReturn);
-        }
-        else
-        {
-            car1.RedFlagReturn = true;
-        }
-
-        car1.OdometerReturned = null;
-        var maxOdo = pb.GetVehicles().OrderByDescending(o => o.odometer).FirstOrDefault();
-        maxOdometer = maxOdo != null ? Convert.ToInt32(maxOdo.odometer) : 100;
-
-        odometerFilter = maxOdometer;
-
-
-
-    }
-    private void ClearError(IVehicle a)
-    {
-        a.RedFlagReturn = false;
-    }
-
 }
